@@ -6,8 +6,8 @@ import {
   LoginScreen,
   HomeScreen,
   RegistrationScreen,
-  CreateScreen,
-} from './src/screens';
+  CreateScreen, JoinScreen,
+} from "./src/screens";
 import {decode, encode} from 'base-64';
 import {firebase} from './src/firebase/config';
 import Screens from './src/constants/Screens';
@@ -69,13 +69,18 @@ export default function App() {
           )}
         </Stack.Screen>
         <Stack.Screen name={Screens.REGISTER} component={RegistrationScreen} />
-        <Stack.Screen name={Screens.CREATE}>
+        <Stack.Screen options={{headerShown: false}} name={Screens.CREATE}>
           {props => (
             <CreateScreen
               {...props}
               user={user}
               navigation={props.navigation}
             />
+          )}
+        </Stack.Screen>
+        <Stack.Screen options={{headerShown: false}} name={Screens.JOIN}>
+          {props => (
+            <JoinScreen {...props} user={user} navigation={props.navigation} />
           )}
         </Stack.Screen>
       </Stack.Navigator>

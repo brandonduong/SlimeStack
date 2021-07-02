@@ -66,7 +66,7 @@ export default function CreateScreen(props) {
     try {
       await matchesRef
         .doc(newGameID)
-        .set({player1ID: user.id})
+        .set({player1ID: user.id, player2ID: null})
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
           navigation.navigate(Screens.HOME);
