@@ -69,11 +69,15 @@ export default function App() {
           )}
         </Stack.Screen>
         <Stack.Screen name={Screens.REGISTER} component={RegistrationScreen} />
-        <Stack.Screen
-          options={{headerShown: false}}
-          name={Screens.CREATE}
-          component={CreateScreen}
-        />
+        <Stack.Screen name={Screens.CREATE}>
+          {props => (
+            <CreateScreen
+              {...props}
+              user={user}
+              navigation={props.navigation}
+            />
+          )}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

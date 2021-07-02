@@ -7,7 +7,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   mainView: {
-    flex: 2,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -16,11 +15,9 @@ export default StyleSheet.create({
   title: {
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
-    color: '#fff',
     marginBottom: 10,
   },
   backButtonView: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',

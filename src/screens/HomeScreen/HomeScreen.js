@@ -23,27 +23,11 @@ export default function HomeScreen(props) {
   const userID = props.user.id;
   const username = props.user.fullName;
 
-  useEffect(() => {
-    console.log(userID);
-
-    entityRef
-      .where('authorID', '==', userID)
-      .orderBy('createdAt', 'asc')
-      .onSnapshot(
-        querySnapshot => {
-          const newEntities = [];
-          querySnapshot.forEach(doc => {
-            const entity = doc.data();
-            entity.id = doc.id;
-            newEntities.push(entity);
-          });
-          setEntities(newEntities);
-        },
-        error => {
-          console.log(error);
-        },
-      );
-  }, []);
+  function logout() {
+    firebase.auth().signOut().then(props.setUser(null));
+    navigation.navigate(Screens.LOGIN);
+    console.log('User logged out');
+  }
 
   return (
     <View style={styles.container}>
@@ -84,9 +68,7 @@ export default function HomeScreen(props) {
         />
         <BackButton
           onPress={() => {
-            firebase.auth().signOut().then(props.setUser(null));
-            navigation.navigate(Screens.LOGIN);
-            console.log('User logged out');
+            logout();
           }}
           margin={Dimensions.get('screen').width / 15}
         />

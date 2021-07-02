@@ -1,20 +1,83 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {Keyboard, Text, View, Dimensions} from 'react-native';
 import styles from './styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
+import Values from '../../constants/Values';
 import {BackButton, LoadingPage} from '../../components/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {firebase} from '../../firebase/config';
 
-export default function CreateScreen({navigation}) {
+export default function CreateScreen(props) {
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const matchesRef = firebase.firestore().collection('match');
+  const navigation = props.navigation;
+  const user = props.user;
 
   useEffect(() => {
     console.log('Create screen');
   }, []);
 
-  async function pressSubmit() {}
+  function makeGameID(length) {
+    let id = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    const max = characters.length;
+    let seededRandom = 0;
+    for (let i = 0; i < length; i++) {
+      seededRandom = Math.random() * max;
+      id += characters.charAt(Math.floor(seededRandom));
+    }
+    return id;
+  }
+
+  //Returns true if the game id is invalid (already exists)
+  async function isValidGameID(id) {
+    if (id === '') {
+      return true;
+    }
+    try {
+      let snapshot = await matchesRef.doc(id).get();
+      console.log(snapshot);
+      if (!snapshot.exists) {
+        // We want to make sure the game doesn't exist yet
+        console.log(`Game ID (${id}) is valid`);
+        return false;
+      } else {
+        console.log(`Game id (${id}) is not valid`);
+        return true;
+      }
+    } catch {
+      console.log(`Failed to check if game id ${id} is valid`);
+      return true;
+    }
+  }
+
+  async function createGame() {
+    Keyboard.dismiss();
+
+    setDisableButton(true);
+    setIsLoading(true);
+    let newGameID = makeGameID(Values.GAME_ID_LENGTH);
+    while (await isValidGameID(newGameID)) {
+      newGameID = makeGameID(Values.GAME_ID_LENGTH);
+    }
+
+    try {
+      await matchesRef
+        .doc(newGameID)
+        .set({player1ID: user.id})
+        .then(() => {
+          console.log('New game ' + newGameID + 'for ' + user.id);
+          navigation.navigate(Screens.HOME);
+        })
+        .catch(error => {
+          alert(error);
+        });
+    } catch (error) {
+      console.log('Game creation failed: ' + error.message);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -33,7 +96,7 @@ export default function CreateScreen({navigation}) {
             */}
             <PrimaryButton
               text={'Start'}
-              onPress={() => pressSubmit()}
+              onPress={() => createGame()}
               disabled={disableButton}
             />
           </View>
