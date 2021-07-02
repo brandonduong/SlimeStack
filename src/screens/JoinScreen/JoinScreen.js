@@ -31,9 +31,24 @@ export default function JoinScreen(props) {
         .doc(joinGameID)
         .get()
         .then(doc => {
-          if (doc.exists && doc.data().player1ID !== user.id) {
-            matchesRef.doc(joinGameID).update({player2ID: user.id});
-            console.log('Join game ' + joinGameID + 'for ' + user.id);
+          console.log(doc.data());
+          if (doc.exists) {
+            const data = doc.data();
+            if (data.player2ID === null) {
+              if (user.id !== data.player1ID) {
+                matchesRef.doc(joinGameID).update({player2ID: user.id});
+                console.log('Join game ' + joinGameID + 'for ' + user.id);
+              }
+            } else if (data.player3ID === null) {
+              if (user.id !== data.player1ID && user.id !== data.player2ID) {
+                matchesRef.doc(joinGameID).update({player3ID: user.id});
+                console.log('Join game ' + joinGameID + 'for ' + user.id);
+              }
+            } else {
+              console.log(
+                'Failed to join game ' + joinGameID + 'for ' + user.id,
+              );
+            }
           } else {
             console.log('Failed to join game ' + joinGameID + 'for ' + user.id);
           }

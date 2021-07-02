@@ -21,7 +21,7 @@ export default function CreateScreen(props) {
 
   function makeGameID(length) {
     let id = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789';
     const max = characters.length;
     let seededRandom = 0;
     for (let i = 0; i < length; i++) {
@@ -66,7 +66,7 @@ export default function CreateScreen(props) {
     try {
       await matchesRef
         .doc(newGameID)
-        .set({player1ID: user.id, player2ID: null})
+        .set({player1ID: user.id, player2ID: null, player3ID: null})
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
           navigation.navigate(Screens.HOME);
