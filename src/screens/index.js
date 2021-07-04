@@ -7,3 +7,5 @@ export {default as RegistrationScreen} from './RegistrationScreen/RegistrationSc
 export {default as CreateScreen} from './CreateScreen/CreateScreen';
 
 export {default as JoinScreen} from './JoinScreen/JoinScreen';
+
+export {default as LobbyScreen} from './LobbyScreen/LobbyScreen';

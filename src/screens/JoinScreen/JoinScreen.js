@@ -52,7 +52,7 @@ export default function JoinScreen(props) {
           } else {
             console.log('Failed to join game ' + joinGameID + 'for ' + user.id);
           }
-          navigation.navigate(Screens.HOME);
+          navigation.navigate(Screens.LOBBY, {gameID: joinGameID});
         })
         .catch(error => {
           alert(error);

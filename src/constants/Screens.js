@@ -4,6 +4,7 @@ const Screens = {
   REGISTER: 'Registration',
   CREATE: 'Create',
   JOIN: 'Join',
+  LOBBY: 'Lobby',
 };
 
 export default Screens;

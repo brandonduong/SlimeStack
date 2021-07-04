@@ -14,12 +14,8 @@ import {BackButton, PrimaryButton} from '../../components/index';
 import Screens from '../../constants/Screens';
 
 export default function HomeScreen(props) {
-  const [entityText, setEntityText] = useState('');
-  const [entities, setEntities] = useState([]);
-  const [showInstructions, setShowInstructions] = useState(false);
   const navigation = props.navigation;
 
-  const entityRef = firebase.firestore().collection('entities');
   const userID = props.user.id;
   const username = props.user.fullName;
 
@@ -62,10 +58,7 @@ export default function HomeScreen(props) {
           text={'Join Game'}
           onPress={() => navigation.navigate(Screens.JOIN)}
         />
-        <PrimaryButton
-          text={'How To Play'}
-          onPress={() => setShowInstructions(true)}
-        />
+        <PrimaryButton text={'How To Play'} />
         <BackButton
           onPress={() => {
             logout();

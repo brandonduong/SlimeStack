@@ -69,7 +69,7 @@ export default function CreateScreen(props) {
         .set({player1ID: user.id, player2ID: null, player3ID: null})
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
-          navigation.navigate(Screens.HOME);
+          navigation.navigate(Screens.LOBBY, {gameID: newGameID});
         })
         .catch(error => {
           alert(error);
