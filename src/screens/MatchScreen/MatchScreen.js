@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Text, View, Button} from 'react-native';
 import styles from './styles';
-import {BackButton} from '../../components';
+import {BackButton, HandRow} from '../../components';
 import Screens from '../../constants/Screens';
-import Slimes from '../../constants/Slimes';
 import Values from '../../constants/Values';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import MatchState from '../../constants/MatchState';
 import {firebase} from '../../firebase/config';
 
 export default function MatchScreen(props) {
   const navigation = props.navigation;
   const matchesRef = firebase.firestore().collection('match');
   const gameID = props.route.params.gameID;
-  const [round, setRound] = useState(0);
+  const [round, setRound] = useState(1);
   const user = props.user;
   const [players, setPlayers] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
@@ -52,52 +49,21 @@ export default function MatchScreen(props) {
       <Text style={styles.title}>Round: {round}</Text>
       <View style={styles.header}>{/* Display current player's turn */}</View>
 
-      <View style={styles.handView}>
-        {playerHand.slice(0, Values.HAND_SIZE / 2).map((slime, id) => (
-          <TouchableOpacity
-            style={
-              (styles.slimeInHand,
-              {
-                backgroundColor: selectedSlime === id ? 'green' : '#DDDDDD',
-              })
-            }
-            key={'hand-' + id}
-            onPress={() => {
-              setSelectedSlime(id);
-              console.log('Player pressed: ' + slime + playerHand[id]);
-            }}>
-            <Text>{slime}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <HandRow
+        hand={playerHand}
+        rowStart={0}
+        rowEnd={Values.HAND_SIZE / 2}
+        selectedSlime={selectedSlime}
+        setSelectedSlime={setSelectedSlime}
+      />
 
-      <View style={styles.handView}>
-        {playerHand
-          .slice(Values.HAND_SIZE / 2 + 1, Values.HAND_SIZE)
-          .map((slime, id) => (
-            <TouchableOpacity
-              style={
-                (styles.slimeInHand,
-                {
-                  backgroundColor:
-                    selectedSlime === id + Values.HAND_SIZE / 2 + 1
-                      ? 'green'
-                      : '#DDDDDD',
-                })
-              }
-              key={'hand-' + id}
-              onPress={() => {
-                setSelectedSlime(id + Values.HAND_SIZE / 2 + 1);
-                console.log(
-                  'Player pressed: ' +
-                    slime +
-                    playerHand[id + Values.HAND_SIZE / 2 + 1],
-                );
-              }}>
-              <Text>{slime}</Text>
-            </TouchableOpacity>
-          ))}
-      </View>
+      <HandRow
+        hand={playerHand}
+        rowStart={Values.HAND_SIZE / 2 + 1}
+        rowEnd={Values.HAND_SIZE}
+        selectedSlime={selectedSlime}
+        setSelectedSlime={setSelectedSlime}
+      />
 
       <View style={styles.buttonView}>
         <BackButton

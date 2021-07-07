@@ -32,14 +32,4 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
-  handView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 2,
-  },
-  slimeInHand: {
-    alignItems: 'center',
-    padding: 10,
-    margin: 2,
-  },
 });
