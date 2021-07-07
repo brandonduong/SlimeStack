@@ -17,6 +17,7 @@ export default function MatchScreen(props) {
   const user = props.user;
   const [players, setPlayers] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
+  const [selectedSlime, setSelectedSlime] = useState(null);
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -54,24 +55,44 @@ export default function MatchScreen(props) {
       <View style={styles.handView}>
         {playerHand.slice(0, Values.HAND_SIZE / 2).map((slime, id) => (
           <TouchableOpacity
-            style={styles.slimeInHand}
+            style={
+              (styles.slimeInHand,
+              {
+                backgroundColor: selectedSlime === id ? 'green' : '#DDDDDD',
+              })
+            }
             key={'hand-' + id}
             onPress={() => {
-              alert('Player pressed: ' + slime);
+              setSelectedSlime(id);
+              console.log('Player pressed: ' + slime + playerHand[id]);
             }}>
             <Text>{slime}</Text>
           </TouchableOpacity>
         ))}
       </View>
+
       <View style={styles.handView}>
         {playerHand
           .slice(Values.HAND_SIZE / 2 + 1, Values.HAND_SIZE)
           .map((slime, id) => (
             <TouchableOpacity
-              style={styles.slimeInHand}
+              style={
+                (styles.slimeInHand,
+                {
+                  backgroundColor:
+                    selectedSlime === id + Values.HAND_SIZE / 2 + 1
+                      ? 'green'
+                      : '#DDDDDD',
+                })
+              }
               key={'hand-' + id}
               onPress={() => {
-                alert('Player pressed: ' + slime);
+                setSelectedSlime(id + Values.HAND_SIZE / 2 + 1);
+                console.log(
+                  'Player pressed: ' +
+                    slime +
+                    playerHand[id + Values.HAND_SIZE / 2 + 1],
+                );
               }}>
               <Text>{slime}</Text>
             </TouchableOpacity>

@@ -35,10 +35,11 @@ export default StyleSheet.create({
   handView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    margin: 2,
   },
   slimeInHand: {
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
     padding: 10,
+    margin: 2,
   },
 });
