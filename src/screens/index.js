@@ -9,3 +9,5 @@ export {default as CreateScreen} from './CreateScreen/CreateScreen';
 export {default as JoinScreen} from './JoinScreen/JoinScreen';
 
 export {default as LobbyScreen} from './LobbyScreen/LobbyScreen';
+
+export {default as MatchScreen} from './MatchScreen/MatchScreen';

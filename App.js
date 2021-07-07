@@ -8,8 +8,8 @@ import {
   RegistrationScreen,
   CreateScreen,
   JoinScreen,
-  LobbyScreen,
-} from './src/screens';
+  LobbyScreen, MatchScreen,
+} from "./src/screens";
 import {decode, encode} from 'base-64';
 import {firebase} from './src/firebase/config';
 import Screens from './src/constants/Screens';
@@ -93,6 +93,17 @@ export default function App() {
         <Stack.Screen options={{headerShown: false}} name={Screens.LOBBY}>
           {props => (
             <LobbyScreen
+              {...props}
+              user={user}
+              navigation={props.navigation}
+              route={props.route}
+            />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen options={{headerShown: false}} name={Screens.MATCH}>
+          {props => (
+            <MatchScreen
               {...props}
               user={user}
               navigation={props.navigation}

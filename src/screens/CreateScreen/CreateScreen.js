@@ -22,7 +22,7 @@ export default function CreateScreen(props) {
 
   function makeGameID(length) {
     let id = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ23456789';
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     const max = characters.length;
     let seededRandom = 0;
     for (let i = 0; i < length; i++) {

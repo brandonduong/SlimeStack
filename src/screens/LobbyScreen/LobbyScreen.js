@@ -6,6 +6,8 @@ import Screens from '../../constants/Screens';
 import {BackButton} from '../../components/index';
 import {firebase} from '../../firebase/config';
 import MatchState from '../../constants/MatchState';
+import Slimes from '../../constants/Slimes';
+import Values from '../../constants/Values';
 
 export default function LobbyScreen(props) {
   const matchesRef = firebase.firestore().collection('match');
@@ -13,9 +15,8 @@ export default function LobbyScreen(props) {
   const navigation = props.navigation;
   const user = props.user;
   const gameID = props.route.params.gameID;
-  const usersRef = firebase.firestore().collection('users');
   const [players, setPlayers] = useState([]);
-  const [playerNames, setPlayerNames] = useState([]);
+  // const [playerNames, setPlayerNames] = useState([]);
 
   useEffect(() => {
     console.log('Lobby screen for: ' + gameID);
@@ -26,7 +27,9 @@ export default function LobbyScreen(props) {
         setPlayers(data.players);
 
         if (data.matchState === MatchState.STARTED) {
-          navigation.navigate(Screens.HOME);
+          navigation.navigate(Screens.MATCH, {
+            gameID: gameID
+          });
         }
 
         /*
@@ -49,12 +52,37 @@ export default function LobbyScreen(props) {
     );
   }, []);
 
+  function initializeHand(size) {
+    let hand = [];
+    const slimes = [
+      Slimes.BLUE,
+      Slimes.GREEN,
+      Slimes.PINK,
+      Slimes.RED,
+      Slimes.YELLOW,
+      Slimes.POOP,
+    ];
+    const max = slimes.length;
+    let seededRandom = 0;
+    for (let i = 0; i < size; i++) {
+      seededRandom = Math.random() * max;
+      hand.push(slimes[Math.floor(seededRandom)]);
+    }
+    console.log(hand);
+    return hand.sort();
+  }
+
   function startGame() {
     if (players.length < 3) {
       alert('Can not start a game with less than 3 players.');
     } else {
-      matchesRef.doc(gameID).update({matchState: MatchState.STARTED});
-      navigation.navigate(Screens.HOME);
+      matchesRef.doc(gameID).update({
+        matchState: MatchState.STARTED,
+        player1Hand: initializeHand(Values.HAND_SIZE),
+        player2Hand: initializeHand(Values.HAND_SIZE),
+        player3Hand: initializeHand(Values.HAND_SIZE),
+      });
+      navigation.navigate(Screens.MATCH, {gameID: gameID});
     }
   }
 
@@ -101,7 +129,7 @@ export default function LobbyScreen(props) {
             disabled={disableButton}
           />
         ) : (
-          <Text style={styles.waitText}>Wait for player 1 to start.</Text>
+          <Text style={styles.waitText}>Waiting for player 1 to start.</Text>
         )}
         <BackButton
           onPress={() => {
