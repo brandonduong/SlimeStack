@@ -4,6 +4,7 @@ import styles from './styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
+import MatchState from '../../constants/MatchState';
 import {BackButton, LoadingPage} from '../../components/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {firebase} from '../../firebase/config';
@@ -66,7 +67,7 @@ export default function CreateScreen(props) {
     try {
       await matchesRef
         .doc(newGameID)
-        .set({players: [user.id]})
+        .set({players: [user.id], matchState: MatchState.LOBBY})
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
           navigation.navigate(Screens.LOBBY, {gameID: newGameID});

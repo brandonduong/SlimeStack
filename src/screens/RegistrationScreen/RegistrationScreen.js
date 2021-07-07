@@ -10,41 +10,47 @@ export default function RegistrationScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const usersRef = firebase.firestore().collection('users');
 
   const onFooterLinkPress = () => {
     navigation.navigate('Login');
   };
 
-  const onRegisterPress = () => {
+  async function onRegisterPress() {
     if (password !== confirmPassword) {
       alert("Passwords don't match.");
       return;
     }
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        const uid = response.user.uid;
-        const data = {
-          id: uid,
-          email,
-          fullName,
-        };
-        const usersRef = firebase.firestore().collection('users');
-        usersRef
-          .doc(uid)
-          .set(data)
-          .then(() => {
-            console.log('User registered');
-            navigation.navigate(Screens.LOGIN);
-          })
-          .catch(error => {
-            alert(error);
-          });
-      })
-      .catch(error => {
-        alert(error);
-      });
+
+    const snapshot = await usersRef.where('fullName', '==', fullName).get();
+    if (!snapshot.empty) {
+      alert('Username already in use.');
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(response => {
+          const uid = response.user.uid;
+          const data = {
+            id: uid,
+            email,
+            fullName,
+          };
+          usersRef
+            .doc(uid)
+            .set(data)
+            .then(() => {
+              console.log('User registered');
+              navigation.navigate(Screens.LOGIN);
+            })
+            .catch(error => {
+              alert(error);
+            });
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
   };
 
   return (

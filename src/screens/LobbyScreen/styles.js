@@ -12,68 +12,36 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  playerView: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: 10
+  },
   title: {
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
     marginBottom: 10,
   },
+  subTitle: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+  },
+  joinCode: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+  },
   playerID: {
     fontSize: Dimensions.get('screen').height / 45,
     fontFamily: 'poppins-semibold',
   },
-  backButtonView: {
+  buttonView: {
     display: 'flex',
+    alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-end',
-    alignItems: 'center',
   },
-  errorBox: {
-    minHeight: Dimensions.get('screen').height / 15,
-    maxHeight: Dimensions.get('screen').height / 15,
-    minWidth: '85%',
-    maxWidth: '85%',
-  },
-  error: {
-    fontSize: Dimensions.get('screen').height / 50,
-    fontFamily: 'poppins-semibold',
-    color: '#fff',
-    textAlign: 'center',
-  },
-  questionTag: {
-    marginTop: 15,
-    paddingLeft: Dimensions.get('screen').width / 15,
-    paddingRight: Dimensions.get('screen').width / 15,
-    minWidth: '85%',
-    maxWidth: '85%',
-  },
-  questionTagText: {
-    fontSize: Dimensions.get('screen').height / 50,
-    fontFamily: 'poppins-semibold',
-    color: '#ffffff66',
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-  },
-  modalContent: {
-    fontSize: Dimensions.get('screen').height / 50,
-    fontFamily: 'poppins-semibold',
-    color: '#ffffffaa',
-    textAlign: 'left',
-  },
-  inputText: {
-    paddingLeft: Dimensions.get('screen').width / 15,
-    paddingRight: Dimensions.get('screen').width / 15,
-    minWidth: '85%',
-    maxWidth: '85%',
-    color: 'green',
-    backgroundColor: '#3c34d9',
-    borderRadius: Dimensions.get('screen').height,
-    height: Dimensions.get('screen').height / 12,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: Dimensions.get('screen').height / 15,
-    textAlign: 'center',
-    overflow: 'hidden',
-  },
+
 });
