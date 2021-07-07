@@ -17,6 +17,10 @@ export default StyleSheet.create({
     fontFamily: 'poppins-semibold',
     marginBottom: 10,
   },
+  playerID: {
+    fontSize: Dimensions.get('screen').height / 45,
+    fontFamily: 'poppins-semibold',
+  },
   backButtonView: {
     display: 'flex',
     flexDirection: 'column',

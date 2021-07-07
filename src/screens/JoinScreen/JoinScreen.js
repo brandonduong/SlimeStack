@@ -23,9 +23,6 @@ export default function JoinScreen(props) {
   async function joinGame() {
     Keyboard.dismiss();
 
-    setDisableButton(true);
-    setIsLoading(true);
-
     try {
       await matchesRef
         .doc(joinGameID)
@@ -34,16 +31,14 @@ export default function JoinScreen(props) {
           console.log(doc.data());
           if (doc.exists) {
             const data = doc.data();
-            if (data.player2ID === null) {
-              if (user.id !== data.player1ID) {
-                matchesRef.doc(joinGameID).update({player2ID: user.id});
-                console.log('Join game ' + joinGameID + 'for ' + user.id);
-              }
-            } else if (data.player3ID === null) {
-              if (user.id !== data.player1ID && user.id !== data.player2ID) {
-                matchesRef.doc(joinGameID).update({player3ID: user.id});
-                console.log('Join game ' + joinGameID + 'for ' + user.id);
-              }
+            if (data.players.length < 3 && !data.players.includes(user.id)) {
+              matchesRef
+                .doc(joinGameID)
+                .update({players: [...data.players, user.id]});
+              console.log('Join game ' + joinGameID + 'for ' + user.id);
+              setDisableButton(true);
+              setIsLoading(true);
+              navigation.navigate(Screens.LOBBY, {gameID: joinGameID});
             } else {
               console.log(
                 'Failed to join game ' + joinGameID + 'for ' + user.id,
@@ -52,7 +47,6 @@ export default function JoinScreen(props) {
           } else {
             console.log('Failed to join game ' + joinGameID + 'for ' + user.id);
           }
-          navigation.navigate(Screens.LOBBY, {gameID: joinGameID});
         })
         .catch(error => {
           alert(error);

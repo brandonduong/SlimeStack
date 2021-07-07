@@ -13,15 +13,19 @@ export default function LobbyScreen(props) {
   const navigation = props.navigation;
   const user = props.user;
   const gameID = props.route.params.gameID;
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
     console.log('Lobby screen for: ' + gameID);
+    matchesRef.doc(gameID).onSnapshot(doc => {
+      const data = doc.data();
+      setPlayers(data.players);
+      console.log('Current data: ', data);
+    });
 
   }, []);
 
-  function startGame() {
-
-  }
+  function startGame() {}
 
   return (
     <View style={styles.container}>
@@ -29,11 +33,21 @@ export default function LobbyScreen(props) {
         <View style={styles.container}>
           <View style={styles.mainView}>
             <Text style={styles.title}>Lobby</Text>
-            <PrimaryButton
-              text={'Start Game'}
-              onPress={() => startGame()}
-              disabled={disableButton}
-            />
+            <Text style={styles.title}>Join Code: {gameID}</Text>
+            {players.map((player, id) => (
+              <Text style={styles.playerID} key={'player-' + id}>
+                Player {id + 1}: {player}
+              </Text>
+            ))}
+            {players[0] === user.id ? (
+              <PrimaryButton
+                text={'Start Game'}
+                onPress={() => startGame()}
+                disabled={disableButton}
+              />
+            ) : (
+              <Text style={styles.waitText}>Wait for player 1 to start.</Text>
+            )}
           </View>
           <View style={styles.backButtonView}>
             <BackButton
