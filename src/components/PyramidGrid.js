@@ -18,45 +18,10 @@ PyramidGrid.propTypes = {
   playerHand: PropTypes.arrayOf(PropTypes.string).isRequired,
   setPlayerHand: PropTypes.func,
   userIndex: PropTypes.number,
+  placeOnGrid: PropTypes.func,
 };
 
 export default function PyramidGrid(props) {
-  const matchesRef = firebase.firestore().collection('match');
-
-  async function placeSlime(cell, slime) {
-    if (slime) {
-      await matchesRef
-        .doc(props.gameID)
-        .get()
-        .then(doc => {
-          if (doc.data().currentPlayerTurn === props.userIndex) {
-            // Register player's move on grid
-            props.pyramidGrid.splice(cell, 1, slime);
-
-            // Remove placed slime from hand
-            const index = props.playerHand.indexOf(slime);
-            props.playerHand.splice(index, 1);
-
-            // Help update database
-            const playerNumHand = 'player' + (props.userIndex + 1) + 'Hand';
-
-            matchesRef
-              .doc(props.gameID)
-              .update({
-                pyramidGrid: props.pyramidGrid,
-                currentPlayerTurn: (doc.data().currentPlayerTurn + 1) % 3,
-                [playerNumHand]: props.playerHand,
-              })
-              .catch(error => {
-                alert(error);
-              });
-          } else {
-            alert('Wait your turn! You are player ' + (props.userIndex + 1));
-          }
-        });
-    }
-  }
-
   function pyramidCellStyle(slime) {
     let colour = '#FFFFFF';
     switch (slime) {
@@ -103,17 +68,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 7 - 21]}
@@ -133,17 +100,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 6 - 15]}
@@ -163,17 +132,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 5 - 10]}
@@ -193,17 +164,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 4 - 6]}
@@ -223,17 +196,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 3 - 3]}
@@ -253,17 +228,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE * 2 - 1]}
@@ -283,17 +260,19 @@ export default function PyramidGrid(props) {
               key={'cell-' + (id + Values.PYRAMID_GRID_BASE_SIZE)}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(
-                  id + Values.PYRAMID_GRID_BASE_SIZE,
-                  props.playerHand[props.selectedSlime],
-                ).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      (id + Values.PYRAMID_GRID_BASE_SIZE),
-                  ),
-                );
+                props
+                  .placeOnGrid(
+                    id + Values.PYRAMID_GRID_BASE_SIZE,
+                    props.playerHand[props.selectedSlime],
+                  )
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        (id + Values.PYRAMID_GRID_BASE_SIZE),
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id + Values.PYRAMID_GRID_BASE_SIZE]}
@@ -310,14 +289,16 @@ export default function PyramidGrid(props) {
               key={'cell-' + id}
               style={pyramidCellStyle(cell)}
               onPress={() => {
-                placeSlime(id, props.playerHand[props.selectedSlime]).then(() =>
-                  console.log(
-                    'Player placed: ' +
-                      props.playerHand[props.selectedSlime] +
-                      ' at cell ' +
-                      id,
-                  ),
-                );
+                props
+                  .placeOnGrid(id, props.playerHand[props.selectedSlime])
+                  .then(() =>
+                    console.log(
+                      'Player placed: ' +
+                        props.playerHand[props.selectedSlime] +
+                        ' at cell ' +
+                        id,
+                    ),
+                  );
               }}>
               <Text style={styles.pyramidCellText}>
                 {props.pyramidGrid[id]}
