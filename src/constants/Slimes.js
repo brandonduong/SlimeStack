@@ -5,7 +5,8 @@ const Slimes = {
   PINK: 'Pink',
   GREEN: 'Green',
   POOP: 'Poop',
-  WILD: 'Wild'
+  WILD: 'Wild',
+  EMPTY: 'Empty',
 };
 
 export default Slimes;

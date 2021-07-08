@@ -8,6 +8,7 @@ import MatchState from '../../constants/MatchState';
 import {BackButton, LoadingPage} from '../../components/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {firebase} from '../../firebase/config';
+import Slimes from '../../constants/Slimes';
 
 export default function CreateScreen(props) {
   const [disableButton, setDisableButton] = useState(false);
@@ -20,6 +21,16 @@ export default function CreateScreen(props) {
     console.log('Create screen');
   }, []);
 
+  function startingPyramidGrid(baseSize) {
+    let pyramidGrid = [];
+    for (let i = baseSize; i > 0; i--) {
+      for (let o = 0; o < i; o++) {
+        pyramidGrid.push(Slimes.EMPTY);
+      }
+    }
+    return pyramidGrid;
+  }
+
   function makeGameID(length) {
     let id = '';
     const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -30,6 +41,11 @@ export default function CreateScreen(props) {
       id += characters.charAt(Math.floor(seededRandom));
     }
     return id;
+  }
+
+  function startingPlayer() {
+    const playerNums = [0, 1, 2];
+    return playerNums[Math.floor(Math.random() * 3)];
   }
 
   //Returns true if the game id is invalid (already exists)
@@ -64,10 +80,17 @@ export default function CreateScreen(props) {
       newGameID = makeGameID(Values.GAME_ID_LENGTH);
     }
 
+    const starter = startingPlayer();
     try {
       await matchesRef
         .doc(newGameID)
-        .set({players: [user.id], matchState: MatchState.LOBBY})
+        .set({
+          players: [user.id],
+          matchState: MatchState.LOBBY,
+          pyramidGrid: startingPyramidGrid(Values.PYRAMID_GRID_BASE_SIZE),
+          startingPlayer: starter,
+          currentPlayerTurn: starter,
+        })
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
           navigation.navigate(Screens.LOBBY, {gameID: newGameID});

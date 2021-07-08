@@ -32,4 +32,9 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
   },
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
 });

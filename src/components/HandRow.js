@@ -21,15 +21,11 @@ export default function HandRow(props) {
     <View style={styles.handView}>
       {props.hand.slice(props.rowStart, props.rowEnd).map((slime, id) => (
         <TouchableOpacity
-          style={
-            (styles.slimeInHand,
-            {
-              backgroundColor:
-                props.selectedSlime === id + props.rowStart
-                  ? 'green'
-                  : '#DDDDDD',
-            })
-          }
+          style={{
+            ...styles.slimeInHand,
+            backgroundColor:
+              props.selectedSlime === id + props.rowStart ? 'green' : '#DDDDDD',
+          }}
           key={'hand-' + id + props.rowStart}
           onPress={() => {
             props.setSelectedSlime(id + props.rowStart);

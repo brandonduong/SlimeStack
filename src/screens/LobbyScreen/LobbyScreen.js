@@ -20,15 +20,16 @@ export default function LobbyScreen(props) {
 
   useEffect(() => {
     console.log('Lobby screen for: ' + gameID);
-    matchesRef.doc(gameID).onSnapshot(
+    const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
         console.log('Current data: ', data);
         setPlayers(data.players);
 
         if (data.matchState === MatchState.STARTED) {
+          kill();
           navigation.navigate(Screens.MATCH, {
-            gameID: gameID
+            gameID: gameID,
           });
         }
 
@@ -82,7 +83,6 @@ export default function LobbyScreen(props) {
         player2Hand: initializeHand(Values.HAND_SIZE),
         player3Hand: initializeHand(Values.HAND_SIZE),
       });
-      navigation.navigate(Screens.MATCH, {gameID: gameID});
     }
   }
 

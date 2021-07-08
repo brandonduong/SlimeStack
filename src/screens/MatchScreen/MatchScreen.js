@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Text, View, Button} from 'react-native';
+import {Dimensions, Text, View, Button, TouchableOpacity} from 'react-native';
 import styles from './styles';
-import {BackButton, HandRow} from '../../components';
+import { BackButton, HandRow, PyramidGrid } from "../../components";
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import {firebase} from '../../firebase/config';
@@ -15,28 +15,34 @@ export default function MatchScreen(props) {
   const [players, setPlayers] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
   const [selectedSlime, setSelectedSlime] = useState(null);
+  const [pyramidGrid, setPyramidGrid] = useState([]);
+  const [currentPlayerTurn, setCurrentPlayerTurn] = useState(-1);
+  const [userIndex, setUserIndex] = useState(-1);
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
+
+    // Initialize match
+    matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        setPlayers(data.players);
+        setUserIndex(data.players.indexOf(user.id));
+        setPyramidGrid(data.pyramidGrid);
+        setCurrentPlayerTurn(data.startingPlayer);
+        getHand(data);
+      });
+
+    // Listen to document updates
     matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
-        setPlayers(data.players);
-        const userIndex = data.players.indexOf(user.id);
-        console.log('Current data: ' + data + 'currentUser: ' + userIndex);
 
-        // Initialize local player hand
-        switch (userIndex) {
-          case 0:
-            setPlayerHand(data.player1Hand);
-            break;
-          case 1:
-            setPlayerHand(data.player2Hand);
-            break;
-          case 2:
-            setPlayerHand(data.player3Hand);
-            break;
-        }
+        // Update game state
+        setPyramidGrid(data.pyramidGrid);
+        setCurrentPlayerTurn(data.currentPlayerTurn);
       },
       err => {
         console.log('Encountered error:' + err);
@@ -44,10 +50,45 @@ export default function MatchScreen(props) {
     );
   }, [gameID, user.id]);
 
+  function getHand(data) {
+    // Initialize local player hand
+    console.log('Fetching hand');
+    switch (data.players.indexOf(user.id)) {
+      case 0:
+        setPlayerHand(data.player1Hand);
+        break;
+      case 1:
+        setPlayerHand(data.player2Hand);
+        break;
+      case 2:
+        setPlayerHand(data.player3Hand);
+        break;
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Round: {round}</Text>
-      <View style={styles.header}>{/* Display current player's turn */}</View>
+      {currentPlayerTurn === userIndex ? (
+        <View style={styles.header}>
+          <Text style={styles.subTitle}>Your Turn!</Text>
+        </View>
+      ) : (
+        <View style={styles.header}>
+          <Text style={styles.subTitle}>
+            Player {currentPlayerTurn + 1}'s Turn!
+          </Text>
+        </View>
+      )}
+
+      <PyramidGrid
+        pyramidGrid={pyramidGrid}
+        selectedSlime={selectedSlime}
+        gameID={gameID}
+        playerHand={playerHand}
+      />
+
+      <View style={styles.separator} />
 
       <HandRow
         hand={playerHand}
