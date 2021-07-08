@@ -24,7 +24,7 @@ export default function HandRow(props) {
           style={{
             ...styles.slimeInHand,
             backgroundColor:
-              props.selectedSlime === id + props.rowStart ? 'green' : '#DDDDDD',
+              props.selectedSlime === id + props.rowStart ? '#7d7d7d' : '#DDDDDD',
           }}
           key={'hand-' + id + props.rowStart}
           onPress={() => {
