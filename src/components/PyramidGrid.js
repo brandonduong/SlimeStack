@@ -16,22 +16,44 @@ PyramidGrid.propTypes = {
   selectedSlime: PropTypes.number,
   gameID: PropTypes.string,
   playerHand: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setPlayerHand: PropTypes.func,
+  userIndex: PropTypes.number,
 };
 
 export default function PyramidGrid(props) {
   const matchesRef = firebase.firestore().collection('match');
 
   async function placeSlime(cell, slime) {
-    props.pyramidGrid.splice(cell, 1, slime);
-    try {
+    if (slime) {
       await matchesRef
         .doc(props.gameID)
-        .update({pyramidGrid: props.pyramidGrid})
-        .catch(error => {
-          alert(error);
+        .get()
+        .then(doc => {
+          if (doc.data().currentPlayerTurn === props.userIndex) {
+            // Register player's move on grid
+            props.pyramidGrid.splice(cell, 1, slime);
+
+            // Remove placed slime from hand
+            const index = props.playerHand.indexOf(slime);
+            props.playerHand.splice(index, 1);
+
+            // Help update database
+            const playerNumHand = 'player' + (props.userIndex + 1) + 'Hand';
+
+            matchesRef
+              .doc(props.gameID)
+              .update({
+                pyramidGrid: props.pyramidGrid,
+                currentPlayerTurn: (doc.data().currentPlayerTurn + 1) % 3,
+                [playerNumHand]: props.playerHand,
+              })
+              .catch(error => {
+                alert(error);
+              });
+          } else {
+            alert('Wait your turn! You are player ' + (props.userIndex + 1));
+          }
         });
-    } catch (error) {
-      console.log('Failed to place slime ' + error.message);
     }
   }
 

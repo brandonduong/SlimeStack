@@ -41,6 +41,7 @@ export default function MatchScreen(props) {
         const data = doc.data();
 
         // Update game state
+        getHand(data);
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.currentPlayerTurn);
       },
@@ -86,6 +87,8 @@ export default function MatchScreen(props) {
         selectedSlime={selectedSlime}
         gameID={gameID}
         playerHand={playerHand}
+        userIndex={userIndex}
+        setPlayerHand={setPlayerHand}
       />
 
       <View style={styles.separator} />
