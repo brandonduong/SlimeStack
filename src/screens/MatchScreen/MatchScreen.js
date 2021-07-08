@@ -117,7 +117,7 @@ export default function MatchScreen(props) {
         for (let o = 0; o < i; o++) {
           if (count === cell) {
             // Can't put anything on poop
-            console.log(cell, i);
+
             if (
               pyramidGrid[cell - i] === Slimes.POOP ||
               pyramidGrid[cell - i - 1] === Slimes.POOP

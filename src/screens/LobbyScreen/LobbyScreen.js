@@ -53,35 +53,44 @@ export default function LobbyScreen(props) {
     );
   }, []);
 
-  function initializeHand(size) {
-    let hand = [];
+  function initializeHands(size) {
+    let hands = [];
     const slimes = [
       Slimes.BLUE,
       Slimes.GREEN,
       Slimes.PINK,
       Slimes.RED,
       Slimes.YELLOW,
-      Slimes.POOP,
     ];
     const max = slimes.length;
     let seededRandom = 0;
-    for (let i = 0; i < size; i++) {
-      seededRandom = Math.random() * max;
-      hand.push(slimes[Math.floor(seededRandom)]);
+    for (let i = 0; i < 3; i++) {
+      let hand = [];
+      for (let o = 0; o < size; o++) {
+        seededRandom = Math.random() * max;
+        hand.push(slimes[Math.floor(seededRandom)]);
+      }
+      console.log(hand);
+      hands.push(hand.sort());
     }
-    console.log(hand);
-    return hand.sort();
+    // 75% chance for a Poo to appear
+    if (Math.floor(Math.random() * 4) >= 1) {
+      hands[Math.floor(Math.random() * 3)][size - 1] = Slimes.POOP;
+    }
+    return hands;
   }
 
   function startGame() {
     if (players.length < 3) {
       alert('Can not start a game with less than 3 players.');
     } else {
+      const hands = initializeHands(Values.HAND_SIZE);
+
       matchesRef.doc(gameID).update({
         matchState: MatchState.STARTED,
-        player1Hand: initializeHand(Values.HAND_SIZE),
-        player2Hand: initializeHand(Values.HAND_SIZE),
-        player3Hand: initializeHand(Values.HAND_SIZE),
+        player1Hand: hands[0],
+        player2Hand: hands[1],
+        player3Hand: hands[2],
       });
     }
   }
