@@ -329,6 +329,6 @@ const styles = StyleSheet.create({
   },
   pyramidCellText: {
     overflow: 'visible',
-    fontSize: Dimensions.get('screen').height / 60,
+    fontSize: Dimensions.get('screen').height / 65,
   },
 });

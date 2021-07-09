@@ -53,12 +53,12 @@ export default function PrimaryButton(props) {
 
 const styles = StyleSheet.create({
   button: {
-    minWidth: '85%',
-    maxWidth: '85%',
+    minWidth: '45%',
+    maxWidth: '45%',
     backgroundColor: '#ffffff',
     borderRadius: Dimensions.get('screen').height,
     margin: 10,
-    height: Dimensions.get('screen').height / 13,
+    height: Dimensions.get('screen').height / 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

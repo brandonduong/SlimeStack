@@ -29,7 +29,7 @@ export default StyleSheet.create({
   buttonView: {
     display: 'flex',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   separator: {

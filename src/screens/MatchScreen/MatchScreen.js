@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Text, View, Button, TouchableOpacity} from 'react-native';
 import styles from './styles';
-import {BackButton, HandRow, PyramidGrid} from '../../components';
+import { BackButton, HandRow, PrimaryButton, PyramidGrid } from "../../components";
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import {firebase} from '../../firebase/config';
@@ -42,9 +42,39 @@ export default function MatchScreen(props) {
         const data = doc.data();
 
         // Update game state
-        getHand(data);
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.currentPlayerTurn);
+
+        // Check if player has valid move, if not skip turn
+        /*
+        if (
+          data.currentPlayerTurn === data.players.indexOf(user.id) &&
+          !validMoveExists(getHand(data), data)
+        ) {
+          endTurn(data);
+          console.log(
+            'No valid move exists for player ' + data.players.indexOf(user.id),
+          );
+
+          // Update in database player can move
+          let playersCanMove = data.playersCanMove;
+          if (playersCanMove[data.players.indexOf(user.id)]) {
+            playersCanMove[data.players.indexOf(user.id)] = false;
+            matchesRef.doc(gameID).update({playersCanMove: playersCanMove});
+          } else {
+            console.log('All players are out of moves');
+          }
+        } else if (
+          data.currentPlayerTurn === data.players.indexOf(user.id) &&
+          validMoveExists(getHand(data), data)
+        ) {
+          // Update in database player can move
+          let playersCanMove = data.playersCanMove;
+          playersCanMove[data.players.indexOf(user.id)] = true;
+          matchesRef.doc(gameID).update({playersCanMove: playersCanMove});
+        }
+
+           */
       },
       err => {
         console.log('Encountered error:' + err);
@@ -58,13 +88,13 @@ export default function MatchScreen(props) {
     switch (data.players.indexOf(user.id)) {
       case 0:
         setPlayerHand(data.player1Hand);
-        break;
+        return data.player1Hand;
       case 1:
         setPlayerHand(data.player2Hand);
-        break;
+        return data.player2Hand;
       case 2:
         setPlayerHand(data.player3Hand);
-        break;
+        return data.player3Hand;
     }
   }
 
@@ -82,19 +112,7 @@ export default function MatchScreen(props) {
             const index = selectedSlime;
             playerHand[index] = '';
 
-            // Help update database
-            const playerNumHand = 'player' + (userIndex + 1) + 'Hand';
-
-            matchesRef
-              .doc(gameID)
-              .update({
-                pyramidGrid: pyramidGrid,
-                currentPlayerTurn: (doc.data().currentPlayerTurn + 1) % 3,
-                [playerNumHand]: playerHand,
-              })
-              .catch(error => {
-                alert(error);
-              });
+            endTurn();
           } else {
             alert('Wait your turn! You are player ' + (userIndex + 1));
           }
@@ -102,44 +120,127 @@ export default function MatchScreen(props) {
     }
   }
 
-  function validMove(cell, slime) {
-    if (pyramidGrid[cell] !== Slimes.EMPTY) {
+  function endTurn() {
+    // Help update database
+    const playerNumHand = 'player' + (userIndex + 1) + 'Hand';
+
+    matchesRef
+      .doc(gameID)
+      .update({
+        pyramidGrid: pyramidGrid,
+        currentPlayerTurn: (currentPlayerTurn + 1) % 3,
+        [playerNumHand]: playerHand,
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
+  function validMove(cell, slime, data) {
+    if (data) {
+      if (data.pyramidGrid[cell] !== Slimes.EMPTY) {
+        return false;
+      }
+      // First row always valid
+      if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
+        return true;
+      } else {
+        // Rest of game logic
+        // console.log('Checking ' + cell + ' for ' + slime);
+        let count = 0;
+        for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
+          for (let o = 0; o < i; o++) {
+            if (count === cell) {
+              // Can't put anything on poop
+
+              if (
+                data.pyramidGrid[cell - i] === Slimes.POOP ||
+                data.pyramidGrid[cell - i - 1] === Slimes.POOP
+              ) {
+                return false;
+              }
+
+              return (
+                (data.pyramidGrid[cell - i] === slime &&
+                  data.pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
+                (data.pyramidGrid[cell - i - 1] === slime &&
+                  data.pyramidGrid[cell - i] !== Slimes.EMPTY) ||
+                (slime === Slimes.POOP &&
+                  data.pyramidGrid[cell - i] !== Slimes.EMPTY &&
+                  data.pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
+              );
+            }
+            count++;
+          }
+        }
+      }
+      return false;
+    } else {
+      console.log(pyramidGrid);
+      if (pyramidGrid[cell] !== Slimes.EMPTY) {
+        return false;
+      }
+      // First row always valid
+      if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
+        return true;
+      } else {
+        // Rest of game logic
+        // console.log('Checking ' + cell + ' for ' + slime);
+        let count = 0;
+        for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
+          for (let o = 0; o < i; o++) {
+            if (count === cell) {
+              // Can't put anything on poop
+
+              if (
+                pyramidGrid[cell - i] === Slimes.POOP ||
+                pyramidGrid[cell - i - 1] === Slimes.POOP
+              ) {
+                return false;
+              }
+
+              return (
+                (pyramidGrid[cell - i] === slime &&
+                  pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
+                (pyramidGrid[cell - i - 1] === slime &&
+                  pyramidGrid[cell - i] !== Slimes.EMPTY) ||
+                (slime === Slimes.POOP &&
+                  pyramidGrid[cell - i] !== Slimes.EMPTY &&
+                  pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
+              );
+            }
+            count++;
+          }
+        }
+      }
       return false;
     }
+  }
 
-    // First row always valid
-    if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
-      return true;
-    } else {
-      // Rest of game logic
-      let count = 0;
+  function validMoveExists(hand, data) {
+    console.log('Checking valid moves for ' + data.pyramidGrid);
+    let good = false;
+    const slimes = [
+      Slimes.BLUE,
+      Slimes.GREEN,
+      Slimes.PINK,
+      Slimes.RED,
+      Slimes.YELLOW,
+      Slimes.POOP,
+    ];
+    let count = 0;
+    slimes.forEach((slime, index) => {
+      count = 0;
       for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
         for (let o = 0; o < i; o++) {
-          if (count === cell) {
-            // Can't put anything on poop
-
-            if (
-              pyramidGrid[cell - i] === Slimes.POOP ||
-              pyramidGrid[cell - i - 1] === Slimes.POOP
-            ) {
-              return false;
-            }
-
-            return (
-              (pyramidGrid[cell - i] === slime &&
-                pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
-              (pyramidGrid[cell - i - 1] === slime &&
-                pyramidGrid[cell - i] !== Slimes.EMPTY) ||
-              (slime === Slimes.POOP &&
-                pyramidGrid[cell - i] !== Slimes.EMPTY &&
-                pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
-            );
-          }
+          // console.log(hand, slime, count);
+          good =
+            good || (validMove(count, slime, data) && hand.includes(slime));
           count++;
         }
       }
-    }
-    return false;
+    });
+    return good;
   }
 
   return (
@@ -186,6 +287,12 @@ export default function MatchScreen(props) {
       />
 
       <View style={styles.buttonView}>
+        <PrimaryButton
+          text={'Skip Turn'}
+          onPress={() => {
+            endTurn();
+          }}
+        />
         <BackButton
           onPress={() => {
             navigation.navigate(Screens.HOME);

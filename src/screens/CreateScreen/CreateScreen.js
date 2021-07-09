@@ -80,7 +80,7 @@ export default function CreateScreen(props) {
       newGameID = makeGameID(Values.GAME_ID_LENGTH);
     }
 
-    const starter = startingPlayer();
+    const starter = 0;//startingPlayer();
     try {
       await matchesRef
         .doc(newGameID)
@@ -90,6 +90,7 @@ export default function CreateScreen(props) {
           pyramidGrid: startingPyramidGrid(Values.PYRAMID_GRID_BASE_SIZE),
           startingPlayer: starter,
           currentPlayerTurn: starter,
+          playersCanMove: [true, true, true],
         })
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
