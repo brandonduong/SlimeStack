@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Text, View, Button, TouchableOpacity} from 'react-native';
 import styles from './styles';
-import { BackButton, HandRow, PrimaryButton, PyramidGrid } from "../../components";
+import {
+  BackButton,
+  HandRow,
+  PrimaryButton,
+  PyramidGrid,
+} from '../../components';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import {firebase} from '../../firebase/config';
@@ -37,13 +42,30 @@ export default function MatchScreen(props) {
       });
 
     // Listen to document updates
-    matchesRef.doc(gameID).onSnapshot(
+    const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
+        // console.log('Current data: ', data);
 
         // Update game state
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.currentPlayerTurn);
+
+        // Stop listening if player has left
+        if (!data.players.includes(user.id)) {
+          console.log('Player stopped listening');
+          kill();
+        }
+
+        // Game is over once all players can not move (indicated by current player can't move)
+        if (
+          data.currentPlayerTurn === data.players.indexOf(user.id) &&
+          !doc.metadata.hasPendingWrites &&
+          !data.playersCanMove[data.players.indexOf(user.id)]
+        ) {
+          console.log(data.playersCanMove);
+          console.log('Game is over');
+        }
 
         // Check if player has valid move, if not skip turn
         /*
@@ -112,6 +134,16 @@ export default function MatchScreen(props) {
             const index = selectedSlime;
             playerHand[index] = '';
 
+            // Reset all checks on playersCanMove
+            matchesRef
+              .doc(gameID)
+              .update({
+                playersCanMove: [true, true, true],
+              })
+              .catch(error => {
+                alert(error);
+              });
+
             endTurn();
           } else {
             alert('Wait your turn! You are player ' + (userIndex + 1));
@@ -122,18 +154,45 @@ export default function MatchScreen(props) {
 
   function endTurn() {
     // Help update database
-    const playerNumHand = 'player' + (userIndex + 1) + 'Hand';
+    if (currentPlayerTurn === userIndex) {
+      const playerNumHand = 'player' + (userIndex + 1) + 'Hand';
 
-    matchesRef
-      .doc(gameID)
-      .update({
-        pyramidGrid: pyramidGrid,
-        currentPlayerTurn: (currentPlayerTurn + 1) % 3,
-        [playerNumHand]: playerHand,
-      })
-      .catch(error => {
-        alert(error);
-      });
+      matchesRef
+        .doc(gameID)
+        .update({
+          pyramidGrid: pyramidGrid,
+          currentPlayerTurn: (currentPlayerTurn + 1) % 3,
+          [playerNumHand]: playerHand,
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
+  }
+
+  function skipTurn() {
+    // Player has no valid move
+
+    if (currentPlayerTurn === userIndex) {
+      matchesRef
+        .doc(gameID)
+        .get()
+        .then(doc => {
+          const data = doc.data();
+          let playersCanMove = data.playersCanMove;
+          playersCanMove[data.players.indexOf(user.id)] = false;
+
+          matchesRef
+            .doc(gameID)
+            .update({
+              playersCanMove: playersCanMove,
+            })
+            .catch(error => {
+              alert(error);
+            });
+          endTurn();
+        });
+    }
   }
 
   function validMove(cell, slime, data) {
@@ -243,6 +302,12 @@ export default function MatchScreen(props) {
     return good;
   }
 
+  async function leaveMatch() {
+    setPlayers(players.splice(userIndex, 1));
+    matchesRef.doc(gameID).update({players: players});
+    navigation.navigate(Screens.HOME);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Round: {round}</Text>
@@ -290,12 +355,12 @@ export default function MatchScreen(props) {
         <PrimaryButton
           text={'Skip Turn'}
           onPress={() => {
-            endTurn();
+            skipTurn();
           }}
         />
         <BackButton
           onPress={() => {
-            navigation.navigate(Screens.HOME);
+            leaveMatch().then(() => console.log('Player left game'));
           }}
           margin={Dimensions.get('screen').width / 15}
         />
