@@ -23,7 +23,7 @@ export default function LobbyScreen(props) {
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
-        console.log('Current data: ', data);
+        // console.log('Current data: ', data);
         setPlayers(data.players);
 
         if (data.matchState === MatchState.STARTED) {

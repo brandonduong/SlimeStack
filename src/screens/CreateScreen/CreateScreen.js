@@ -80,7 +80,7 @@ export default function CreateScreen(props) {
       newGameID = makeGameID(Values.GAME_ID_LENGTH);
     }
 
-    const starter = 0;//startingPlayer();
+    const starter = startingPlayer();
     try {
       await matchesRef
         .doc(newGameID)
@@ -91,6 +91,7 @@ export default function CreateScreen(props) {
           startingPlayer: starter,
           currentPlayerTurn: starter,
           playersCanMove: [true, true, true],
+          roundNum: 1,
         })
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);

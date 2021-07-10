@@ -38,6 +38,7 @@ export default function MatchScreen(props) {
         setUserIndex(data.players.indexOf(user.id));
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.startingPlayer);
+        setRound(data.roundNum);
         getHand(data);
       });
 
@@ -45,11 +46,16 @@ export default function MatchScreen(props) {
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
-        // console.log('Current data: ', data);
+        console.log(
+          'Current data for player: ',
+          data.players.indexOf(user.id),
+          data,
+        );
 
         // Update game state
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.currentPlayerTurn);
+        setRound(data.roundNum);
 
         // Stop listening if player has left
         if (!data.players.includes(user.id)) {
@@ -69,40 +75,37 @@ export default function MatchScreen(props) {
 
         // Check if player has valid move, if not skip turn
         /*
-        if (
-          data.currentPlayerTurn === data.players.indexOf(user.id) &&
-          !validMoveExists(getHand(data), data)
-        ) {
-          endTurn(data);
-          console.log(
-            'No valid move exists for player ' + data.players.indexOf(user.id),
-          );
 
-          // Update in database player can move
-          let playersCanMove = data.playersCanMove;
-          if (playersCanMove[data.players.indexOf(user.id)]) {
-            playersCanMove[data.players.indexOf(user.id)] = false;
-            matchesRef.doc(gameID).update({playersCanMove: playersCanMove});
-          } else {
-            console.log('All players are out of moves');
-          }
-        } else if (
-          data.currentPlayerTurn === data.players.indexOf(user.id) &&
-          validMoveExists(getHand(data), data)
-        ) {
-          // Update in database player can move
-          let playersCanMove = data.playersCanMove;
-          playersCanMove[data.players.indexOf(user.id)] = true;
-          matchesRef.doc(gameID).update({playersCanMove: playersCanMove});
-        }
 
-           */
+         */
       },
       err => {
         console.log('Encountered error:' + err);
       },
     );
   }, [gameID, user.id]);
+
+  useEffect(() => {
+    /*
+    console.log(
+      'Current player turn:',
+      currentPlayerTurn,
+      userIndex,
+      pyramidGrid,
+    );
+    if (
+      currentPlayerTurn === userIndex &&
+      !validMoveExists(playerHand, {pyramidGrid: pyramidGrid})
+    ) {
+      skipTurn().then(() =>
+        console.log('No valid move exists for player ' + userIndex),
+      );
+    } else if (currentPlayerTurn === userIndex) {
+      console.log('Player has valid move for', playerHand, 'in', pyramidGrid);
+    }
+
+     */
+  }, [pyramidGrid]);
 
   function getHand(data) {
     // Initialize local player hand
@@ -152,33 +155,48 @@ export default function MatchScreen(props) {
     }
   }
 
-  function endTurn() {
-    // Help update database
-    if (currentPlayerTurn === userIndex) {
-      const playerNumHand = 'player' + (userIndex + 1) + 'Hand';
+  async function endTurn() {
+    await matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        // Help update database
+        if (
+          data.currentPlayerTurn === data.players.indexOf(user.id) &&
+          pyramidGrid
+        ) {
+          const playerNumHand =
+            'player' + (data.players.indexOf(user.id) + 1) + 'Hand';
 
-      matchesRef
-        .doc(gameID)
-        .update({
-          pyramidGrid: pyramidGrid,
-          currentPlayerTurn: (currentPlayerTurn + 1) % 3,
-          [playerNumHand]: playerHand,
-        })
-        .catch(error => {
-          alert(error);
-        });
-    }
+          let newRoundNum = round;
+          if ((data.players.indexOf(user.id) + 1) % 3 === data.startingPlayer) {
+            newRoundNum += 1;
+          }
+
+          matchesRef
+            .doc(gameID)
+            .update({
+              pyramidGrid: pyramidGrid,
+              currentPlayerTurn: (data.currentPlayerTurn + 1) % 3,
+              [playerNumHand]: playerHand,
+              roundNum: newRoundNum,
+            })
+            .catch(error => {
+              alert(error);
+            });
+        }
+      });
   }
 
-  function skipTurn() {
+  async function skipTurn() {
     // Player has no valid move
-
-    if (currentPlayerTurn === userIndex) {
-      matchesRef
-        .doc(gameID)
-        .get()
-        .then(doc => {
-          const data = doc.data();
+    await matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        if (data.currentPlayerTurn === data.players.indexOf(user.id)) {
           let playersCanMove = data.playersCanMove;
           playersCanMove[data.players.indexOf(user.id)] = false;
 
@@ -191,8 +209,8 @@ export default function MatchScreen(props) {
               alert(error);
             });
           endTurn();
-        });
-    }
+        }
+      });
   }
 
   function validMove(cell, slime, data) {
