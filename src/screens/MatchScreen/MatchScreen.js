@@ -31,6 +31,7 @@ export default function MatchScreen(props) {
   const [userIndex, setUserIndex] = useState(-1);
   const [winners, setWinners] = useState([]);
   const [gameEnded, setGameEnded] = useState(MatchState.STARTED);
+  const [playersCanMove, setPlayersCanMove] = useState([true, true, true]);
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -47,11 +48,10 @@ export default function MatchScreen(props) {
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.startingPlayer);
         setRound(data.roundNum);
+        setPlayersCanMove(data.playersCanMove);
         getHand(data);
       });
-  }, []);
 
-  useEffect(() => {
     // Listen to document updates
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
@@ -71,6 +71,7 @@ export default function MatchScreen(props) {
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
           setGameEnded(data.matchState);
+          setPlayersCanMove(data.playersCanMove);
 
           // Find index of the player before current player
           let lastPlayerIndex = data.players.indexOf(user.id - 1);
@@ -376,11 +377,28 @@ export default function MatchScreen(props) {
         </View>
         <View styles={styles.remainingSlimes}>
           {playerNames.map((playerName, id) => (
-            <Text
-              style={styles.remainingSlimeCounter}
-              key={'remaining-slime-counter' + id}>
-              {playerName}: {playerHandSizes[id]}
-            </Text>
+            <View style={styles.remainingSlime}>
+              {currentPlayerTurn === id ? (
+                <View style={styles.turnIndicator} />
+              ) : (
+                <></>
+              )}
+
+              <Text
+                style={styles.remainingSlimeCounter}
+                key={'remaining-slime-counter' + id}>
+                {playersCanMove[id] ? (
+                  <></>
+                ) : (
+                  <Text
+                    styles={styles.playerCanMoveIndicator}
+                    key={'can-move-indicator' + id}>
+                    X{' '}
+                  </Text>
+                )}
+                {playerName}: {playerHandSizes[id]}
+              </Text>
+            </View>
           ))}
         </View>
       </View>

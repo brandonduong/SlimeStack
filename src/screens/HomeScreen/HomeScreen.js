@@ -30,7 +30,6 @@ export default function HomeScreen(props) {
       <Text style={styles.title}>Slime Stack</Text>
       <View style={styles.header}>
         <Text style={styles.feedbackText}>Welcome, {username}. </Text>
-        <Text style={styles.feedbackText}>UserID: {userID}.</Text>
       </View>
       {/*
       <View style={styles.formContainer}>
