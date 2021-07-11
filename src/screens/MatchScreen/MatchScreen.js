@@ -51,34 +51,35 @@ export default function MatchScreen(props) {
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
-        console.log(
-          'Current data for player: ',
-          data.players.indexOf(user.id),
-          data,
-        );
-
-        // Update game state
-        setPyramidGrid(data.pyramidGrid);
-        setCurrentPlayerTurn(data.currentPlayerTurn);
-        setRound(data.roundNum);
-        setGameEnded(data.matchState);
 
         // Stop listening if player has left
         if (!data.players.includes(user.id)) {
           console.log('Player stopped listening');
           kill();
-        }
+        } else if (gameEnded === MatchState.STARTED) {
+          console.log(
+            'Current data for player: ',
+            data.players.indexOf(user.id),
+            data,
+          );
 
-        // Game is over once all players can not move (indicated by current player can't move)
-        if (
-          data.currentPlayerTurn === data.players.indexOf(user.id) &&
-          !doc.metadata.hasPendingWrites &&
-          !data.playersCanMove[data.players.indexOf(user.id)]
-        ) {
-          console.log(data.playersCanMove);
-          console.log('Game is over');
+          // Update game state
+          setPyramidGrid(data.pyramidGrid);
+          setCurrentPlayerTurn(data.currentPlayerTurn);
+          setRound(data.roundNum);
+          setGameEnded(data.matchState);
 
-          endGame();
+          // Game is over once all players can not move (indicated by current player can't move)
+          if (
+            data.currentPlayerTurn === data.players.indexOf(user.id) &&
+            !doc.metadata.hasPendingWrites &&
+            !data.playersCanMove[data.players.indexOf(user.id)]
+          ) {
+            console.log(data.playersCanMove);
+            console.log('Game is over');
+
+            endGame();
+          }
         }
 
         // Check if player has valid move, if not skip turn
@@ -460,11 +461,11 @@ export default function MatchScreen(props) {
             }
           }}
         />
-        <BackButton
+        <PrimaryButton
+          text={'Leave'}
           onPress={() => {
             leaveMatch().then(() => console.log('Player left game'));
           }}
-          margin={Dimensions.get('screen').width / 15}
         />
       </View>
     </View>
