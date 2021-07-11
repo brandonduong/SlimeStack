@@ -312,7 +312,6 @@ export default function PyramidGrid(props) {
 
 const styles = StyleSheet.create({
   pyramid: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

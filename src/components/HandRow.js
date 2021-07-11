@@ -18,36 +18,49 @@ HandRow.propTypes = {
 };
 
 export default function HandRow(props) {
-  function handSlimeStyle(slime) {
+  function addOpacity(rgbString, opacity) {
+    return rgbString.split(')')[0] + ',' + opacity + ')';
+  }
+
+  function handSlimeStyle(slime, slimeIndex) {
     let colour = '#DDDDDD';
+    let opacity = 0.5;
+
+    if (props.selectedSlime === slimeIndex) {
+      opacity = 1;
+    }
+    console.log(props.selectedSlime);
+
     switch (slime) {
       case Slimes.YELLOW:
-        colour = 'yellow';
+        colour = addOpacity('rgba(255,255,0)', opacity);
         break;
       case Slimes.RED:
-        colour = 'red';
+        colour = addOpacity('rgba(255, 0, 0)', opacity);
         break;
       case Slimes.PINK:
-        colour = 'pink';
+        colour = addOpacity('rgba(255,192,203)', opacity);
         break;
       case Slimes.GREEN:
-        colour = 'green';
+        colour = addOpacity('rgba(0,128,0)', opacity);
         break;
       case Slimes.BLUE:
-        colour = 'lightblue';
+        colour = addOpacity('rgba(173, 216, 230)', opacity);
         break;
       case Slimes.POOP:
-        colour = 'brown';
+        colour = addOpacity('rgba(165, 42, 42)', opacity);
         break;
     }
 
     return {
       margin: 2,
-      width: Dimensions.get('screen').width / 5 - 20,
-      height: Dimensions.get('screen').width / 5 - 20,
+      width: Dimensions.get('screen').width / 5 - 25,
+      height: Dimensions.get('screen').width / 5 - 25,
       justifyContent: 'space-evenly',
       alignItems: 'center',
       backgroundColor: colour,
+      borderColor: 'black',
+      borderWidth: 2,
     };
   }
 
@@ -55,7 +68,7 @@ export default function HandRow(props) {
     <View style={styles.handView}>
       {props.hand.slice(props.rowStart, props.rowEnd).map((slime, id) => (
         <TouchableOpacity
-          style={handSlimeStyle(slime)}
+          style={handSlimeStyle(slime, id + props.rowStart)}
           key={'hand-' + id + props.rowStart}
           onPress={() => {
             props.setSelectedSlime(id + props.rowStart);

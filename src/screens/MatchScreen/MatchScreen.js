@@ -347,13 +347,22 @@ export default function MatchScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Round: {round}</Text>
-      <MatchEventHeader
-        gameEnded={gameEnded}
-        currentPlayerTurn={currentPlayerTurn}
-        userIndex={userIndex}
-        winners={winners}
-      />
+      <View style={styles.matchInfoHeader}>
+        <View style={styles.rounds}>
+          <Text style={styles.roundCounter}>Round: {round}</Text>
+          <MatchEventHeader
+            gameEnded={gameEnded}
+            currentPlayerTurn={currentPlayerTurn}
+            userIndex={userIndex}
+            winners={winners}
+          />
+        </View>
+        <View styles={styles.remainingSlimes}>
+          <Text style={styles.remainingSlimeCounter}>Tupy: 8</Text>
+          <Text style={styles.remainingSlimeCounter}>Legolas: 7</Text>
+          <Text style={styles.remainingSlimeCounter}>123ufc: 10</Text>
+        </View>
+      </View>
 
       <PyramidGrid
         pyramidGrid={pyramidGrid}
@@ -369,21 +378,23 @@ export default function MatchScreen(props) {
 
       <View style={styles.separator} />
 
-      <HandRow
-        hand={playerHand}
-        rowStart={0}
-        rowEnd={Values.HAND_SIZE / 2}
-        selectedSlime={selectedSlime}
-        setSelectedSlime={setSelectedSlime}
-      />
+      <View style={styles.hand}>
+        <HandRow
+          hand={playerHand}
+          rowStart={0}
+          rowEnd={Values.HAND_SIZE / 2}
+          selectedSlime={selectedSlime}
+          setSelectedSlime={setSelectedSlime}
+        />
 
-      <HandRow
-        hand={playerHand}
-        rowStart={Values.HAND_SIZE / 2}
-        rowEnd={Values.HAND_SIZE}
-        selectedSlime={selectedSlime}
-        setSelectedSlime={setSelectedSlime}
-      />
+        <HandRow
+          hand={playerHand}
+          rowStart={Values.HAND_SIZE / 2}
+          rowEnd={Values.HAND_SIZE}
+          selectedSlime={selectedSlime}
+          setSelectedSlime={setSelectedSlime}
+        />
+      </View>
 
       <View style={styles.buttonView}>
         <PrimaryButton

@@ -67,4 +67,10 @@ export default function MatchEventHeader(props) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  subTitle: {
+    fontSize: Dimensions.get('screen').height / 60,
+    fontFamily: 'poppins-semibold',
+    marginLeft: 0.5,
+  },
+});

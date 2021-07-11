@@ -2,10 +2,8 @@ import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginHorizontal: 10,
+    marginVertical: 5,
   },
   mainView: {
     display: 'flex',
@@ -21,10 +19,27 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-  title: {
-    fontSize: Dimensions.get('screen').height / 20,
+  roundCounter: {
+    fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
-    marginBottom: 10,
+  },
+  remainingSlimeCounter: {
+    fontSize: Dimensions.get('screen').height / 40,
+    fontFamily: 'poppins-semibold',
+  },
+  matchInfoHeader: {
+    flexDirection: 'row',
+    display: 'flex',
+  },
+  rounds: {
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  remainingSlimes: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
   buttonView: {
     display: 'flex',
@@ -36,5 +51,8 @@ export default StyleSheet.create({
     marginVertical: 8,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  hand: {
+    backgroundColor: 'rgba(45,45,45,0.2)',
   },
 });
