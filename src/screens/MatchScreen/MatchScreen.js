@@ -24,6 +24,7 @@ export default function MatchScreen(props) {
   const [round, setRound] = useState(1);
   const [players, setPlayers] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
+  const [playerHandSizes, setPlayerHandSizes] = useState([12, 12, 12]);
   const [selectedSlime, setSelectedSlime] = useState(null);
   const [pyramidGrid, setPyramidGrid] = useState([]);
   const [currentPlayerTurn, setCurrentPlayerTurn] = useState(-1);
@@ -67,11 +68,26 @@ export default function MatchScreen(props) {
             data,
           );
 
-          // Update game state
-          setPyramidGrid(data.pyramidGrid);
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
           setGameEnded(data.matchState);
+
+          // Find index of the player before current player
+          let lastPlayerIndex = data.players.indexOf(user.id - 1);
+          if (lastPlayerIndex === -1) {
+            lastPlayerIndex = 2;
+          }
+
+          // Only update game state if last player did something
+          if (data.playersCanMove[lastPlayerIndex]) {
+            // Update game state
+            setPyramidGrid(data.pyramidGrid);
+            setPlayerHandSizes([
+              countHandSize(data.player1Hand),
+              countHandSize(data.player2Hand),
+              countHandSize(data.player3Hand),
+            ]);
+          }
 
           // Game is over once all players can not move (indicated by current player can't move)
           if (
@@ -360,7 +376,11 @@ export default function MatchScreen(props) {
         </View>
         <View styles={styles.remainingSlimes}>
           {playerNames.map((playerName, id) => (
-            <Text style={styles.remainingSlimeCounter}>{playerName}: 8</Text>
+            <Text
+              style={styles.remainingSlimeCounter}
+              key={'remaining-slime-counter' + id}>
+              {playerName}: {playerHandSizes[id]}
+            </Text>
           ))}
         </View>
       </View>

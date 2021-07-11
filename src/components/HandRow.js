@@ -24,11 +24,7 @@ export default function HandRow(props) {
 
   function handSlimeStyle(slime, slimeIndex) {
     let colour = '#DDDDDD';
-    let opacity = 0.5;
-
-    if (props.selectedSlime === slimeIndex) {
-      opacity = 1;
-    }
+    let opacity = 1;
 
     switch (slime) {
       case Slimes.YELLOW:
@@ -51,6 +47,11 @@ export default function HandRow(props) {
         break;
     }
 
+    opacity = 0.5;
+    if (props.selectedSlime === slimeIndex) {
+      opacity = 1;
+    }
+
     return {
       margin: 2,
       width: Dimensions.get('screen').width / 5 - 25,
@@ -58,8 +59,8 @@ export default function HandRow(props) {
       justifyContent: 'space-evenly',
       alignItems: 'center',
       backgroundColor: colour,
-      borderColor: 'black',
-      borderWidth: 2,
+      borderColor: addOpacity('rgba(0, 0, 0)', opacity),
+      borderWidth: 3,
     };
   }
 
