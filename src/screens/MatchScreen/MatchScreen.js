@@ -4,6 +4,7 @@ import styles from './styles';
 import {
   BackButton,
   HandRow,
+  MatchEventHeader,
   PrimaryButton,
   PyramidGrid,
 } from '../../components';
@@ -26,7 +27,7 @@ export default function MatchScreen(props) {
   const [currentPlayerTurn, setCurrentPlayerTurn] = useState(-1);
   const [userIndex, setUserIndex] = useState(-1);
   const [winners, setWinners] = useState([]);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameEnded, setGameEnded] = useState(MatchState.STARTED);
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -272,85 +273,45 @@ export default function MatchScreen(props) {
       });
   }
 
-  function validMove(cell, slime, data) {
-    if (data) {
-      if (data.pyramidGrid[cell] !== Slimes.EMPTY) {
-        return false;
-      }
-      // First row always valid
-      if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
-        return true;
-      } else {
-        // Rest of game logic
-        // console.log('Checking ' + cell + ' for ' + slime);
-        let count = 0;
-        for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
-          for (let o = 0; o < i; o++) {
-            if (count === cell) {
-              // Can't put anything on poop
-
-              if (
-                data.pyramidGrid[cell - i] === Slimes.POOP ||
-                data.pyramidGrid[cell - i - 1] === Slimes.POOP
-              ) {
-                return false;
-              }
-
-              return (
-                (data.pyramidGrid[cell - i] === slime &&
-                  data.pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
-                (data.pyramidGrid[cell - i - 1] === slime &&
-                  data.pyramidGrid[cell - i] !== Slimes.EMPTY) ||
-                (slime === Slimes.POOP &&
-                  data.pyramidGrid[cell - i] !== Slimes.EMPTY &&
-                  data.pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
-              );
-            }
-            count++;
-          }
-        }
-      }
-      return false;
-    } else {
-      console.log(pyramidGrid);
-      if (pyramidGrid[cell] !== Slimes.EMPTY) {
-        return false;
-      }
-      // First row always valid
-      if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
-        return true;
-      } else {
-        // Rest of game logic
-        // console.log('Checking ' + cell + ' for ' + slime);
-        let count = 0;
-        for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
-          for (let o = 0; o < i; o++) {
-            if (count === cell) {
-              // Can't put anything on poop
-
-              if (
-                pyramidGrid[cell - i] === Slimes.POOP ||
-                pyramidGrid[cell - i - 1] === Slimes.POOP
-              ) {
-                return false;
-              }
-
-              return (
-                (pyramidGrid[cell - i] === slime &&
-                  pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
-                (pyramidGrid[cell - i - 1] === slime &&
-                  pyramidGrid[cell - i] !== Slimes.EMPTY) ||
-                (slime === Slimes.POOP &&
-                  pyramidGrid[cell - i] !== Slimes.EMPTY &&
-                  pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
-              );
-            }
-            count++;
-          }
-        }
-      }
+  function validMove(cell, slime) {
+    console.log(pyramidGrid);
+    if (pyramidGrid[cell] !== Slimes.EMPTY) {
       return false;
     }
+    // First row always valid
+    if (cell < Values.PYRAMID_GRID_BASE_SIZE) {
+      return true;
+    } else {
+      // Rest of game logic
+      // console.log('Checking ' + cell + ' for ' + slime);
+      let count = 0;
+      for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
+        for (let o = 0; o < i; o++) {
+          if (count === cell) {
+            // Can't put anything on poop
+
+            if (
+              pyramidGrid[cell - i] === Slimes.POOP ||
+              pyramidGrid[cell - i - 1] === Slimes.POOP
+            ) {
+              return false;
+            }
+
+            return (
+              (pyramidGrid[cell - i] === slime &&
+                pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
+              (pyramidGrid[cell - i - 1] === slime &&
+                pyramidGrid[cell - i] !== Slimes.EMPTY) ||
+              (slime === Slimes.POOP &&
+                pyramidGrid[cell - i] !== Slimes.EMPTY &&
+                pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
+            );
+          }
+          count++;
+        }
+      }
+    }
+    return false;
   }
 
   function validMoveExists(hand, data) {
@@ -370,8 +331,7 @@ export default function MatchScreen(props) {
       for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
         for (let o = 0; o < i; o++) {
           // console.log(hand, slime, count);
-          good =
-            good || (validMove(count, slime, data) && hand.includes(slime));
+          good = good || (validMove(count, slime) && hand.includes(slime));
           count++;
         }
       }
@@ -388,37 +348,12 @@ export default function MatchScreen(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Round: {round}</Text>
-      {gameEnded === MatchState.STARTED ? (
-        currentPlayerTurn === userIndex ? (
-          <View style={styles.header}>
-            <Text style={styles.subTitle}>Your Turn!</Text>
-          </View>
-        ) : (
-          <View style={styles.header}>
-            <Text style={styles.subTitle}>
-              Player {currentPlayerTurn + 1}'s Turn!
-            </Text>
-          </View>
-        )
-      ) : (
-        <></>
-      )}
-
-      {gameEnded === MatchState.FINISHED && winners && winners.length > 0 ? (
-        <View style={styles.header}>
-          <Text style={styles.subTitle}>
-            Players{' '}
-            {winners
-              .map(item => {
-                return item + 1;
-              })
-              .join(', ')}{' '}
-            win!
-          </Text>
-        </View>
-      ) : (
-        <></>
-      )}
+      <MatchEventHeader
+        gameEnded={gameEnded}
+        currentPlayerTurn={currentPlayerTurn}
+        userIndex={userIndex}
+        winners={winners}
+      />
 
       <PyramidGrid
         pyramidGrid={pyramidGrid}

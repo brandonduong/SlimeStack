@@ -7,3 +7,5 @@ export {default as BackButton} from './BackButton';
 export {default as HandRow} from './HandRow';
 
 export {default as PyramidGrid} from './PyramidGrid';
+
+export {default as MatchEventHeader} from './MatchEventHeader';
