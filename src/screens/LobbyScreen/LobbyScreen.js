@@ -21,18 +21,16 @@ export default function LobbyScreen(props) {
   // const [playerNames, setPlayerNames] = useState([]);
 
   useEffect(() => {
-    console.log('Lobby screen for: ' + gameID);
+    console.log('Lobby screen fo r: ' + gameID);
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
         // console.log('Current data: ', data);
-        setPlayers(data.players);
 
+        // Stop listening
+        setPlayers(data.players);
         if (data.matchState === MatchState.STARTED) {
           kill();
-          navigation.navigate(Screens.MATCH, {
-            gameID: gameID,
-          });
         }
 
         /*
@@ -56,6 +54,7 @@ export default function LobbyScreen(props) {
   }, []);
 
   useEffect(() => {
+    // Whenever player state changes, update playerNames list
     if (players.length > 0) {
       usersRef
         .where('id', 'in', players)
@@ -74,6 +73,26 @@ export default function LobbyScreen(props) {
     }
   }, [players]);
 
+  useEffect(() => {
+    // Wait for playerNames to update before moving to match
+    matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        if (data.matchState === MatchState.STARTED && playerNames.length > 0) {
+          console.log(playerNames);
+          navigation.navigate(Screens.MATCH, {
+            gameID: gameID,
+            playerNames: playerNames,
+          });
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }, [playerNames]);
+
   function initializeHands(size) {
     let hands = [];
     const slimes = [
@@ -91,7 +110,7 @@ export default function LobbyScreen(props) {
         seededRandom = Math.random() * max;
         hand.push(slimes[Math.floor(seededRandom)]);
       }
-      console.log(hand);
+      console.log('Hand:', hand);
       hands.push(hand.sort());
     }
     // 75% chance for a Poo to appear
@@ -106,6 +125,7 @@ export default function LobbyScreen(props) {
       alert('Can not start a game with less than 3 players.');
     } else {
       const hands = initializeHands(Values.HAND_SIZE);
+      console.log(playerNames);
 
       matchesRef.doc(gameID).update({
         matchState: MatchState.STARTED,

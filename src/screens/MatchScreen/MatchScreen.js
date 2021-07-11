@@ -18,8 +18,10 @@ export default function MatchScreen(props) {
   const navigation = props.navigation;
   const matchesRef = firebase.firestore().collection('match');
   const gameID = props.route.params.gameID;
-  const [round, setRound] = useState(1);
+  const playerNames = props.route.params.playerNames;
   const user = props.user;
+
+  const [round, setRound] = useState(1);
   const [players, setPlayers] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
   const [selectedSlime, setSelectedSlime] = useState(null);
@@ -31,6 +33,7 @@ export default function MatchScreen(props) {
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
+    //console.log(playerNames);
 
     // Initialize match
     matchesRef
@@ -76,7 +79,6 @@ export default function MatchScreen(props) {
             !doc.metadata.hasPendingWrites &&
             !data.playersCanMove[data.players.indexOf(user.id)]
           ) {
-            console.log(data.playersCanMove);
             console.log('Game is over');
 
             endGame();
@@ -274,7 +276,6 @@ export default function MatchScreen(props) {
   }
 
   function validMove(cell, slime) {
-    console.log(pyramidGrid);
     if (pyramidGrid[cell] !== Slimes.EMPTY) {
       return false;
     }
@@ -358,9 +359,9 @@ export default function MatchScreen(props) {
           />
         </View>
         <View styles={styles.remainingSlimes}>
-          <Text style={styles.remainingSlimeCounter}>Tupy: 8</Text>
-          <Text style={styles.remainingSlimeCounter}>Legolas: 7</Text>
-          <Text style={styles.remainingSlimeCounter}>123ufc: 10</Text>
+          {playerNames.map((playerName, id) => (
+            <Text style={styles.remainingSlimeCounter}>{playerName}: 8</Text>
+          ))}
         </View>
       </View>
 

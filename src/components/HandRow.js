@@ -29,7 +29,6 @@ export default function HandRow(props) {
     if (props.selectedSlime === slimeIndex) {
       opacity = 1;
     }
-    console.log(props.selectedSlime);
 
     switch (slime) {
       case Slimes.YELLOW:
