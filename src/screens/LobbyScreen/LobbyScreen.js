@@ -11,11 +11,13 @@ import Values from '../../constants/Values';
 
 export default function LobbyScreen(props) {
   const matchesRef = firebase.firestore().collection('match');
+  const usersRef = firebase.firestore().collection('users');
   const [disableButton, setDisableButton] = useState(false);
   const navigation = props.navigation;
   const user = props.user;
   const gameID = props.route.params.gameID;
   const [players, setPlayers] = useState([]);
+  const [playerNames, setPlayerNames] = useState([]);
   // const [playerNames, setPlayerNames] = useState([]);
 
   useEffect(() => {
@@ -52,6 +54,25 @@ export default function LobbyScreen(props) {
       },
     );
   }, []);
+
+  useEffect(() => {
+    if (players.length > 0) {
+      usersRef
+        .where('id', 'in', players)
+        .get()
+        .then(docs => {
+          let names = [];
+          docs.forEach(doc => {
+            const data = doc.data();
+            names[players.indexOf(data.id)] = data.fullName;
+          });
+          setPlayerNames(names);
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
+  }, [players]);
 
   function initializeHands(size) {
     let hands = [];
@@ -97,7 +118,9 @@ export default function LobbyScreen(props) {
 
   async function leaveRoom() {
     const userIndex = players.indexOf(user.id);
+
     setPlayers(players.splice(userIndex, 1));
+    // Update player list in firestore
     matchesRef.doc(gameID).update({players: players});
     await checkIfLastToLeave();
     navigation.navigate(Screens.HOME);
@@ -110,6 +133,7 @@ export default function LobbyScreen(props) {
       .get()
       .then(doc => {
         if (doc.data().players.length === 0) {
+          // Delete lobby is all players left
           doc.delete();
         }
       })
@@ -122,8 +146,17 @@ export default function LobbyScreen(props) {
         <Text style={styles.title}>Lobby</Text>
         <Text style={styles.subTitle}>Join Code:</Text>
         <Text style={styles.joinCode}>{gameID}</Text>
+        {/*
         <View style={styles.playerView}>
           {players.map((player, id) => (
+            <Text style={styles.playerID} key={'player-' + id}>
+              Player {id + 1}: {player}
+            </Text>
+          ))}
+        </View>
+        */}
+        <View style={styles.playerView}>
+          {playerNames.map((player, id) => (
             <Text style={styles.playerID} key={'player-' + id}>
               Player {id + 1}: {player}
             </Text>
