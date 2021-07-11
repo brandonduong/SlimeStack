@@ -66,7 +66,11 @@ export default function RegistrationScreen({navigation}) {
           style={styles.input}
           placeholder="Full Name"
           placeholderTextColor="#aaaaaa"
-          onChangeText={text => setFullName(text)}
+          onChangeText={text => {
+            if (fullName.length < 12) {
+              setFullName(text);
+            }
+          }}
           value={fullName}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
