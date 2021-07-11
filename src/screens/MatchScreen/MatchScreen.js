@@ -11,6 +11,7 @@ import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import {firebase} from '../../firebase/config';
 import Slimes from '../../constants/Slimes';
+import MatchState from '../../constants/MatchState';
 
 export default function MatchScreen(props) {
   const navigation = props.navigation;
@@ -24,6 +25,8 @@ export default function MatchScreen(props) {
   const [pyramidGrid, setPyramidGrid] = useState([]);
   const [currentPlayerTurn, setCurrentPlayerTurn] = useState(-1);
   const [userIndex, setUserIndex] = useState(-1);
+  const [winners, setWinners] = useState([]);
+  const [gameEnded, setGameEnded] = useState(false);
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -41,7 +44,9 @@ export default function MatchScreen(props) {
         setRound(data.roundNum);
         getHand(data);
       });
+  }, []);
 
+  useEffect(() => {
     // Listen to document updates
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
@@ -56,6 +61,7 @@ export default function MatchScreen(props) {
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.currentPlayerTurn);
         setRound(data.roundNum);
+        setGameEnded(data.matchState);
 
         // Stop listening if player has left
         if (!data.players.includes(user.id)) {
@@ -71,6 +77,8 @@ export default function MatchScreen(props) {
         ) {
           console.log(data.playersCanMove);
           console.log('Game is over');
+
+          endGame();
         }
 
         // Check if player has valid move, if not skip turn
@@ -83,7 +91,13 @@ export default function MatchScreen(props) {
         console.log('Encountered error:' + err);
       },
     );
-  }, [gameID, user.id]);
+  }, []);
+
+  useEffect(() => {
+    if (gameEnded === MatchState.FINISHED) {
+      getWinners();
+    }
+  }, [gameEnded]);
 
   useEffect(() => {
     /*
@@ -107,6 +121,15 @@ export default function MatchScreen(props) {
      */
   }, [pyramidGrid]);
 
+  function endGame() {
+    matchesRef
+      .doc(gameID)
+      .update({matchState: MatchState.FINISHED})
+      .catch(error => {
+        alert(error);
+      });
+  }
+
   function getHand(data) {
     // Initialize local player hand
     console.log('Fetching hand');
@@ -121,6 +144,41 @@ export default function MatchScreen(props) {
         setPlayerHand(data.player3Hand);
         return data.player3Hand;
     }
+  }
+  function countHandSize(hand) {
+    const handCopy = [...hand];
+    console.log('Counting', handCopy);
+    let empty = handCopy.indexOf(''); // Hand has element '' for every slime played
+    while (empty !== -1) {
+      handCopy.splice(empty, 1);
+      empty = handCopy.indexOf('');
+    }
+    return handCopy.length;
+  }
+
+  function getWinners() {
+    matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        const handCount = [
+          countHandSize(data.player1Hand),
+          countHandSize(data.player2Hand),
+          countHandSize(data.player3Hand),
+        ];
+        const winnerHandCount = Math.min(...handCount);
+        console.log(handCount, winnerHandCount);
+
+        let winningPlayers = [];
+        let winningPlayer = handCount.indexOf(winnerHandCount);
+        while (winningPlayer !== -1) {
+          winningPlayers.push(winningPlayer);
+          winningPlayer = handCount.indexOf(winnerHandCount, winningPlayer + 1);
+        }
+        console.log('Winners:', winningPlayers);
+        setWinners(winningPlayers);
+      });
   }
 
   async function placeSlime(cell, slime) {
@@ -329,16 +387,36 @@ export default function MatchScreen(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Round: {round}</Text>
-      {currentPlayerTurn === userIndex ? (
-        <View style={styles.header}>
-          <Text style={styles.subTitle}>Your Turn!</Text>
-        </View>
+      {gameEnded === MatchState.STARTED ? (
+        currentPlayerTurn === userIndex ? (
+          <View style={styles.header}>
+            <Text style={styles.subTitle}>Your Turn!</Text>
+          </View>
+        ) : (
+          <View style={styles.header}>
+            <Text style={styles.subTitle}>
+              Player {currentPlayerTurn + 1}'s Turn!
+            </Text>
+          </View>
+        )
       ) : (
+        <></>
+      )}
+
+      {gameEnded === MatchState.FINISHED && winners && winners.length > 0 ? (
         <View style={styles.header}>
           <Text style={styles.subTitle}>
-            Player {currentPlayerTurn + 1}'s Turn!
+            Players{' '}
+            {winners
+              .map(item => {
+                return item + 1;
+              })
+              .join(', ')}{' '}
+            win!
           </Text>
         </View>
+      ) : (
+        <></>
       )}
 
       <PyramidGrid
@@ -348,7 +426,9 @@ export default function MatchScreen(props) {
         playerHand={playerHand}
         userIndex={userIndex}
         setPlayerHand={setPlayerHand}
-        placeOnGrid={placeSlime}
+        placeOnGrid={
+          gameEnded === MatchState.STARTED ? placeSlime : async () => {}
+        }
       />
 
       <View style={styles.separator} />
@@ -373,7 +453,11 @@ export default function MatchScreen(props) {
         <PrimaryButton
           text={'Skip Turn'}
           onPress={() => {
-            skipTurn();
+            if (gameEnded === MatchState.STARTED) {
+              skipTurn().then(() =>
+                console.log('Player', userIndex, 'skipped turn'),
+              );
+            }
           }}
         />
         <BackButton
