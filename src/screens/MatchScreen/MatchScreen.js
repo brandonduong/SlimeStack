@@ -101,12 +101,6 @@ export default function MatchScreen(props) {
             endGame();
           }
         }
-
-        // Check if player has valid move, if not skip turn
-        /*
-
-
-         */
       },
       err => {
         console.log('Encountered error:' + err);
@@ -119,28 +113,6 @@ export default function MatchScreen(props) {
       getWinners();
     }
   }, [gameEnded]);
-
-  useEffect(() => {
-    /*
-    console.log(
-      'Current player turn:',
-      currentPlayerTurn,
-      userIndex,
-      pyramidGrid,
-    );
-    if (
-      currentPlayerTurn === userIndex &&
-      !validMoveExists(playerHand, {pyramidGrid: pyramidGrid})
-    ) {
-      skipTurn().then(() =>
-        console.log('No valid move exists for player ' + userIndex),
-      );
-    } else if (currentPlayerTurn === userIndex) {
-      console.log('Player has valid move for', playerHand, 'in', pyramidGrid);
-    }
-
-     */
-  }, [pyramidGrid]);
 
   function endGame() {
     matchesRef
@@ -330,31 +302,6 @@ export default function MatchScreen(props) {
       }
     }
     return false;
-  }
-
-  function validMoveExists(hand, data) {
-    console.log('Checking valid moves for ' + data.pyramidGrid);
-    let good = false;
-    const slimes = [
-      Slimes.BLUE,
-      Slimes.GREEN,
-      Slimes.PINK,
-      Slimes.RED,
-      Slimes.YELLOW,
-      Slimes.POOP,
-    ];
-    let count = 0;
-    slimes.forEach((slime, index) => {
-      count = 0;
-      for (let i = Values.PYRAMID_GRID_BASE_SIZE; i > 0; i--) {
-        for (let o = 0; o < i; o++) {
-          // console.log(hand, slime, count);
-          good = good || (validMove(count, slime) && hand.includes(slime));
-          count++;
-        }
-      }
-    });
-    return good;
   }
 
   async function leaveMatch() {
