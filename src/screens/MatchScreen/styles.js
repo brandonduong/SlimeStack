@@ -23,6 +23,10 @@ export default StyleSheet.create({
     fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
   },
+  turnTimer: {
+    fontSize: Dimensions.get('screen').height / 40,
+    fontFamily: 'poppins-semibold',
+  },
   remainingSlimeCounter: {
     fontSize: Dimensions.get('screen').height / 50,
     textAlign: 'right',

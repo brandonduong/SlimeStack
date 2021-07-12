@@ -32,6 +32,7 @@ export default function MatchScreen(props) {
   const [winners, setWinners] = useState([]);
   const [gameEnded, setGameEnded] = useState(MatchState.STARTED);
   const [playersCanMove, setPlayersCanMove] = useState([true, true, true]);
+  const [turnTimeLeft, setTurnTimeLeft] = useState(-1); // First turn should have no timer
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -59,7 +60,7 @@ export default function MatchScreen(props) {
 
         // Stop listening if player has left
         if (!data.players.includes(user.id)) {
-          console.log('Player stopped listening');
+          console.log('Player stopped listening ');
           kill();
         } else if (gameEnded === MatchState.STARTED) {
           console.log(
@@ -67,6 +68,15 @@ export default function MatchScreen(props) {
             data.players.indexOf(user.id),
             data,
           );
+
+          // First turn should not have a turn timer
+          if (
+            (!data.roundNum === 1) ||
+            (data.roundNum === 1 &&
+              data.currentPlayerTurn !== data.startingPlayer)
+          ) {
+            setTurnTimeLeft(Values.TURN_TIMER);
+          }
 
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
@@ -107,6 +117,18 @@ export default function MatchScreen(props) {
       },
     );
   }, []);
+
+  useEffect(() => {
+    if (turnTimeLeft > 0) {
+      const timer = setTimeout(() => {
+        setTurnTimeLeft(turnTimeLeft - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (turnTimeLeft === 0 && currentPlayerTurn === userIndex) {
+      console.log('Turn timer ran out');
+      skipTurn();
+    }
+  }, [turnTimeLeft]);
 
   useEffect(() => {
     if (gameEnded === MatchState.FINISHED) {
@@ -321,6 +343,11 @@ export default function MatchScreen(props) {
             userIndex={userIndex}
             winners={winners}
           />
+          {turnTimeLeft >= 0 ? (
+            <Text style={styles.turnTimer}>Time Left: {turnTimeLeft}</Text>
+          ) : (
+            <Text style={styles.turnTimer}></Text>
+          )}
         </View>
         <View styles={styles.remainingSlimes}>
           {playerNames.map((playerName, id) => (
