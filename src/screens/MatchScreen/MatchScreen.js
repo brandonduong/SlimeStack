@@ -69,14 +69,8 @@ export default function MatchScreen(props) {
             data,
           );
 
-          // First turn should not have a turn timer
-          if (
-            (!data.roundNum === 1) ||
-            (data.roundNum === 1 &&
-              data.currentPlayerTurn !== data.startingPlayer)
-          ) {
-            setTurnTimeLeft(Values.TURN_TIMER);
-          }
+          // Reset turn timer for every new turn
+          setTurnTimeLeft(Values.TURN_TIMER);
 
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
@@ -162,7 +156,7 @@ export default function MatchScreen(props) {
   }
   function countHandSize(hand) {
     const handCopy = [...hand];
-    console.log('Counting', handCopy);
+    // console.log('Counting', handCopy);
     let empty = handCopy.indexOf(''); // Hand has element '' for every slime played
     while (empty !== -1) {
       handCopy.splice(empty, 1);
@@ -346,7 +340,7 @@ export default function MatchScreen(props) {
           {turnTimeLeft >= 0 ? (
             <Text style={styles.turnTimer}>Time Left: {turnTimeLeft}</Text>
           ) : (
-            <Text style={styles.turnTimer}></Text>
+            <Text style={styles.turnTimer} />
           )}
         </View>
         <View styles={styles.remainingSlimes}>
