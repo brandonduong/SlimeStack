@@ -71,7 +71,6 @@ export default function MatchScreen(props) {
 
           // Reset turn timer for every new turn
           setTurnTimeLeft(Values.TURN_TIMER);
-
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
           setGameEnded(data.matchState);

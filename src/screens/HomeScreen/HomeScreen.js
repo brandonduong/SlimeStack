@@ -16,8 +16,26 @@ import Screens from '../../constants/Screens';
 export default function HomeScreen(props) {
   const navigation = props.navigation;
 
+  const usersRef = firebase.firestore().collection('users');
   const userID = props.user.id;
   const username = props.user.fullName;
+
+  const [slimeCoins, setSlimeCoins] = useState(0);
+
+  useEffect(() => {
+    usersRef
+      .doc(userID)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          setSlimeCoins(data.slimeCoins);
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }, []);
 
   function logout() {
     firebase.auth().signOut().then(props.setUser(null));
@@ -30,6 +48,7 @@ export default function HomeScreen(props) {
       <Text style={styles.title}>Slime Stack</Text>
       <View style={styles.header}>
         <Text style={styles.feedbackText}>Welcome, {username}. </Text>
+        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
       </View>
       {/*
       <View style={styles.formContainer}>

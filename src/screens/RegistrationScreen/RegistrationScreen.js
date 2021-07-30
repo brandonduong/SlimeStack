@@ -4,6 +4,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import {firebase} from '../../firebase/config';
 import Screens from '../../constants/Screens';
+import Values from "../../constants/Values";
 
 export default function RegistrationScreen({navigation}) {
   const [fullName, setFullName] = useState('');
@@ -35,6 +36,7 @@ export default function RegistrationScreen({navigation}) {
             id: uid,
             email,
             fullName,
+            slimeCoins: Values.NEW_ACCOUNT_SLIME_COINS,
           };
           usersRef
             .doc(uid)
