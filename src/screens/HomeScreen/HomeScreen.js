@@ -12,6 +12,8 @@ import styles from './styles';
 import {firebase} from '../../firebase/config';
 import {BackButton, PrimaryButton} from '../../components/index';
 import Screens from '../../constants/Screens';
+import MatchState from '../../constants/MatchState';
+import Values from '../../constants/Values';
 
 export default function HomeScreen(props) {
   const navigation = props.navigation;
@@ -23,19 +25,22 @@ export default function HomeScreen(props) {
   const [slimeCoins, setSlimeCoins] = useState(0);
 
   useEffect(() => {
-    usersRef
-      .doc(userID)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          const data = doc.data();
+    const kill = usersRef.doc(userID).onSnapshot(
+      doc => {
+        const data = doc.data();
+        // Stop listening if player has left
+        if (!firebase.auth().currentUser) {
+          console.log('Player logged out ');
+          kill();
+        } else {
           setSlimeCoins(data.slimeCoins);
         }
-      })
-      .catch(error => {
-        alert(error);
-      });
-  }, []);
+      },
+      err => {
+        console.log('Encountered error:' + err);
+      },
+    );
+  }, [userID, usersRef]);
 
   function logout() {
     firebase.auth().signOut().then(props.setUser(null));

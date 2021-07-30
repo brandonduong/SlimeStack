@@ -17,6 +17,7 @@ import MatchState from '../../constants/MatchState';
 export default function MatchScreen(props) {
   const navigation = props.navigation;
   const matchesRef = firebase.firestore().collection('match');
+  const usersRef = firebase.firestore().collection('users');
   const gameID = props.route.params.gameID;
   const playerNames = props.route.params.playerNames;
   const user = props.user;
@@ -112,14 +113,16 @@ export default function MatchScreen(props) {
   }, []);
 
   useEffect(() => {
-    if (turnTimeLeft > 0) {
-      const timer = setTimeout(() => {
-        setTurnTimeLeft(turnTimeLeft - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else if (turnTimeLeft === 0 && currentPlayerTurn === userIndex) {
-      console.log('Turn timer ran out');
-      skipTurn();
+    if (gameEnded === MatchState.STARTED) {
+      if (turnTimeLeft > 0) {
+        const timer = setTimeout(() => {
+          setTurnTimeLeft(turnTimeLeft - 1);
+        }, 1000);
+        return () => clearTimeout(timer);
+      } else if (turnTimeLeft === 0 && currentPlayerTurn === userIndex) {
+        console.log('Turn timer ran out');
+        skipTurn();
+      }
     }
   }, [turnTimeLeft]);
 
@@ -186,6 +189,26 @@ export default function MatchScreen(props) {
         }
         console.log('Winners:', winningPlayers);
         setWinners(winningPlayers);
+      });
+
+    awardSlimeCoin();
+  }
+
+  function awardSlimeCoin() {
+    usersRef
+      .doc(user.id)
+      .get()
+      .then(doc => {
+        const data = doc.data();
+        console.log(playerHandSizes[userIndex]);
+        usersRef.doc(user.id).update({
+          slimeCoins:
+            data.slimeCoins +
+            (Values.HAND_SIZE - playerHandSizes[userIndex]) * 10,
+        });
+      })
+      .catch(error => {
+        alert(error);
       });
   }
 
@@ -336,7 +359,7 @@ export default function MatchScreen(props) {
             userIndex={userIndex}
             winners={winners}
           />
-          {turnTimeLeft >= 0 ? (
+          {turnTimeLeft >= 0 && gameEnded === MatchState.STARTED ? (
             <Text style={styles.turnTimer}>Time Left: {turnTimeLeft}</Text>
           ) : (
             <Text style={styles.turnTimer} />
