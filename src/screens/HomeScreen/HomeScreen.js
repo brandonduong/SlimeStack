@@ -76,7 +76,9 @@ export default function HomeScreen(props) {
       <View style={styles.buttonView}>
         <PrimaryButton
           text={'Create Game'}
-          onPress={() => navigation.navigate(Screens.CREATE)}
+          onPress={() =>
+            navigation.navigate(Screens.CREATE, {slimeCoins: slimeCoins})
+          }
         />
         <PrimaryButton
           text={'Join Game'}

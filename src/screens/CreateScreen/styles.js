@@ -1,21 +1,15 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
-  mainView: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
   title: {
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
-    marginBottom: 10,
+    marginBottom: 3,
+    marginTop: 50,
   },
-  backButtonView: {
+  buttonView: {
+    flex: 2,
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   errorBox: {
@@ -49,5 +43,12 @@ export default StyleSheet.create({
     fontFamily: 'poppins-semibold',
     color: '#ffffffaa',
     textAlign: 'left',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: Dimensions.get('screen').height / 40,
   },
 });

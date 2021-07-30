@@ -1,19 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
-  formContainer: {
-    flexDirection: 'row',
-    height: 80,
-    marginTop: 80,
-    marginBottom: 20,
-    flex: 1,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   input: {
     height: 48,
     borderRadius: 5,
@@ -50,8 +37,10 @@ export default StyleSheet.create({
     color: '#333333',
   },
   title: {
-    fontSize: 50,
-    marginTop: 50,
+    fontSize: Dimensions.get('screen').height / 20,
+    fontFamily: 'poppins-semibold',
+    marginBottom: 3,
+    marginTop: 50
   },
   instructionsTag: {
     marginTop: 15,
@@ -81,6 +70,5 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: Dimensions.get('screen').height / 40,
-    marginTop: 3,
   },
 });

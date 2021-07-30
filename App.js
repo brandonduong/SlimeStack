@@ -84,13 +84,18 @@ export default function App() {
                 {...props}
                 user={user}
                 navigation={props.navigation}
+                route={props.route}
               />
             )}
           </Stack.Screen>
 
           <Stack.Screen options={{headerShown: false}} name={Screens.JOIN}>
             {props => (
-              <JoinScreen {...props} user={user} navigation={props.navigation} />
+              <JoinScreen
+                {...props}
+                user={user}
+                navigation={props.navigation}
+              />
             )}
           </Stack.Screen>
 

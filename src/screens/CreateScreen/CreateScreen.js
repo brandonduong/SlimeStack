@@ -17,6 +17,7 @@ export default function CreateScreen(props) {
   const matchesRef = firebase.firestore().collection('match');
   const navigation = props.navigation;
   const user = props.user;
+  const slimeCoins = props.route.params.slimeCoins;
 
   useEffect(() => {
     console.log('Create screen');
@@ -109,32 +110,23 @@ export default function CreateScreen(props) {
   return (
     <View style={globalStyles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <View style={styles.mainView}>
-            <Text style={styles.title}>Create Game</Text>
-            {/*
-            <TextInput
-              autoCorrect={false}
-              marginBottom={10}
-              onChangeText={text => this.updateName(text)}
-              placeholder={'Your Name'}
-              value={this.state.name}
-            />
-            */}
-            <PrimaryButton
-              text={'Start'}
-              onPress={() => createGame()}
-              disabled={disableButton}
-            />
-          </View>
-          <View style={styles.backButtonView}>
-            <BackButton
-              onPress={() => {
-                navigation.navigate(Screens.HOME);
-              }}
-              margin={Dimensions.get('screen').width / 15}
-            />
-          </View>
+        <Text style={styles.title}>Create Game</Text>
+        <View style={styles.header}>
+          <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
+          <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+        </View>
+        <View style={styles.buttonView}>
+          <PrimaryButton
+            text={'Start'}
+            onPress={() => createGame()}
+            disabled={disableButton}
+          />
+          <BackButton
+            onPress={() => {
+              navigation.navigate(Screens.HOME);
+            }}
+            margin={Dimensions.get('screen').width / 15}
+          />
         </View>
       </TouchableWithoutFeedback>
     </View>
