@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Text, View, Button, TouchableOpacity} from 'react-native';
 import styles from './styles';
+import globalStyles from '../../styles';
 import {
   BackButton,
   HandRow,
@@ -349,7 +350,7 @@ export default function MatchScreen(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <View style={styles.matchInfoHeader}>
         <View style={styles.rounds}>
           <Text style={styles.roundCounter}>Round: {round}</Text>

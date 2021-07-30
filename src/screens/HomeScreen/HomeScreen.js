@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import styles from './styles';
+import globalStyles from '../../styles';
 import {firebase} from '../../firebase/config';
 import {BackButton, PrimaryButton} from '../../components/index';
 import Screens from '../../constants/Screens';
@@ -49,7 +50,7 @@ export default function HomeScreen(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <Text style={styles.title}>Slime Stack</Text>
       <View style={styles.header}>
         <Text style={styles.feedbackText}>Welcome, {username}. </Text>

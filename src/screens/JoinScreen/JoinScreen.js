@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Keyboard, Text, View, Dimensions, TextInput} from 'react-native';
 import styles from './styles';
+import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
@@ -57,7 +58,7 @@ export default function JoinScreen(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <View style={styles.mainView}>

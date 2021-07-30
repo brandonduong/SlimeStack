@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, Dimensions} from 'react-native';
 import styles from './styles';
+import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
 import {BackButton} from '../../components/index';
@@ -161,7 +162,7 @@ export default function LobbyScreen(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <View style={styles.mainView}>
         <Text style={styles.title}>Lobby</Text>
         <Text style={styles.subTitle}>Join Code:</Text>
