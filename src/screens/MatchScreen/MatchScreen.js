@@ -21,6 +21,7 @@ export default function MatchScreen(props) {
   const usersRef = firebase.firestore().collection('users');
   const gameID = props.route.params.gameID;
   const playerNames = props.route.params.playerNames;
+  const buyinFee = props.route.params.buyinFee;
   const user = props.user;
 
   const [round, setRound] = useState(1);
@@ -55,6 +56,16 @@ export default function MatchScreen(props) {
         setRound(data.roundNum);
         setPlayersCanMove(data.playersCanMove);
         getHand(data);
+
+        // Pay Buy-in Fee
+        usersRef
+          .doc(user.id)
+          .get()
+          .then(userDoc => {
+            usersRef
+              .doc(user.id)
+              .update({slimeCoins: userDoc.data().slimeCoins - data.buyinFee});
+          });
       });
 
     // Listen to document updates
@@ -194,22 +205,26 @@ export default function MatchScreen(props) {
         }
         console.log('Winners:', winningPlayers);
         setWinners(winningPlayers);
-      });
 
-    awardSlimeCoin();
+        awardSlimeCoin(winningPlayers);
+      });
   }
 
-  function awardSlimeCoin() {
+  function awardSlimeCoin(winningPlayers) {
     usersRef
       .doc(user.id)
       .get()
       .then(doc => {
         const data = doc.data();
-        console.log(playerHandSizes[userIndex]);
+
+        let reward = (Values.HAND_SIZE - playerHandSizes[userIndex]) * 10;
+        if (winningPlayers.includes(userIndex)) {
+          // Player is a winner, and shares pot with other winners
+          reward += (buyinFee * 3) / winningPlayers.length;
+        }
+
         usersRef.doc(user.id).update({
-          slimeCoins:
-            data.slimeCoins +
-            (Values.HAND_SIZE - playerHandSizes[userIndex]) * 10,
+          slimeCoins: data.slimeCoins + reward,
         });
       })
       .catch(error => {

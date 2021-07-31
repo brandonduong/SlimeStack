@@ -56,9 +56,16 @@ export default function JoinScreen(props) {
                   {
                     text: 'Join',
                     onPress: () => {
-                      matchesRef
-                        .doc(joinGameID)
-                        .update({players: [...data.players, user.id]});
+                      // Use firestore transactions to avoid race conditions
+                      firebase.firestore().runTransaction(async t => {
+                        const newestDoc = await t.get(
+                          matchesRef.doc(joinGameID),
+                        );
+                        t.update(matchesRef.doc(joinGameID), {
+                          players: [...newestDoc.data().players, user.id],
+                        });
+                      });
+
                       console.log('Join game ' + joinGameID + 'for ' + user.id);
                       setDisableButton(true);
                       setIsLoading(true);

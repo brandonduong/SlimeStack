@@ -37,6 +37,7 @@ export default function LobbyScreen(props) {
         // console.log('Current data: ', data);
 
         // Stop listening
+
         setPlayers(data.players);
         if (data.matchState === MatchState.STARTED) {
           kill();
@@ -94,6 +95,7 @@ export default function LobbyScreen(props) {
           navigation.navigate(Screens.MATCH, {
             gameID: gameID,
             playerNames: playerNames,
+            buyinFee: buyinFee,
           });
         }
       })
