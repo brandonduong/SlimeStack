@@ -173,7 +173,7 @@ export default function LobbyScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={styles.title}>Lobby</Text>
+      <Text style={globalStyles.title}>Lobby</Text>
       <Text style={styles.subTitle}>Join Code:</Text>
       <Text style={styles.joinCode}>{gameID}</Text>
       <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
@@ -193,7 +193,7 @@ export default function LobbyScreen(props) {
           </Text>
         ))}
       </View>
-      <View style={styles.buttonView}>
+      <View style={globalStyles.buttonView}>
         {players[0] === user.id ? (
           <PrimaryButton
             text={'Start Game'}

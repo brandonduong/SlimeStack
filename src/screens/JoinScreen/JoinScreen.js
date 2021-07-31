@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, Text, View, Dimensions, TextInput} from 'react-native';
+import { Keyboard, Text, View, Dimensions, TextInput, Image } from "react-native";
 import styles from './styles';
 import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -97,10 +97,18 @@ export default function JoinScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={styles.title}>Join Game</Text>
-      <View style={styles.header}>
-        <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
-        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+      <Text style={globalStyles.title}>Join Game</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.feedbackText}>
+          Welcome, {user.fullName}.{' '}
+        </Text>
+        <Text style={globalStyles.feedbackText}>
+          SlimeCoins: {slimeCoins}{' '}
+          <Image
+            style={globalStyles.slimeCoins}
+            source={require('../../assets/slimecoin.png')}
+          />
+        </Text>
       </View>
       <TextInput
         placeholderTextColor="green"
@@ -117,7 +125,7 @@ export default function JoinScreen(props) {
         onPress={() => joinGame()}
         disabled={disableButton}
       />
-      <View style={styles.buttonView}>
+      <View style={globalStyles.buttonView}>
         <BackButton
           onPress={() => {
             navigation.navigate(Screens.HOME);

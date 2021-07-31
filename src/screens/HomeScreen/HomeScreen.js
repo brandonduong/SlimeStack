@@ -1,13 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  Keyboard,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import {firebase} from '../../firebase/config';
@@ -51,10 +43,17 @@ export default function HomeScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={styles.title}>Slime Stack</Text>
-      <View style={styles.header}>
-        <Text style={styles.feedbackText}>Welcome, {username}. </Text>
-        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+      <Text style={globalStyles.title}>Slime Stack</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.feedbackText}>Welcome, {username}. </Text>
+        <Text style={globalStyles.feedbackText}>
+          SlimeCoins: {slimeCoins}{' '}
+          <Image
+            style={globalStyles.slimeCoins}
+            source={require('../../assets/slimecoin.png')}
+          />
+        </Text>
+
       </View>
       {/*
       <View style={styles.formContainer}>
@@ -73,7 +72,7 @@ export default function HomeScreen(props) {
       </View>
       */}
 
-      <View style={styles.buttonView}>
+      <View style={globalStyles.buttonView}>
         <PrimaryButton
           text={'Create Game'}
           onPress={() =>

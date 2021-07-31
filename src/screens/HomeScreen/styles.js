@@ -36,12 +36,6 @@ export default StyleSheet.create({
     fontSize: 20,
     color: '#333333',
   },
-  title: {
-    fontSize: Dimensions.get('screen').height / 20,
-    fontFamily: 'poppins-semibold',
-    marginBottom: 3,
-    marginTop: 50,
-  },
   instructionsTag: {
     marginTop: 15,
     paddingLeft: Dimensions.get('screen').width / 15,
@@ -53,22 +47,5 @@ export default StyleSheet.create({
     fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
     textAlign: 'center',
-  },
-  buttonView: {
-    flex: 2,
-    minWidth: '85%',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  feedbackText: {
-    fontSize: Dimensions.get('screen').height / 60,
-    textAlign: 'left',
-  },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: Dimensions.get('screen').height / 40,
   },
 });

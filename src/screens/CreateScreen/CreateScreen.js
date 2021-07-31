@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, Text, View, Dimensions} from 'react-native';
+import {Keyboard, Text, View, Dimensions, Image} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -114,12 +114,20 @@ export default function CreateScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={styles.title}>Create Game</Text>
-      <View style={styles.header}>
-        <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
-        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+      <Text style={globalStyles.title}>Create Game</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.feedbackText}>
+          Welcome, {user.fullName}.{' '}
+        </Text>
+        <Text style={globalStyles.feedbackText}>
+          SlimeCoins: {slimeCoins}{' '}
+          <Image
+            style={globalStyles.slimeCoins}
+            source={require('../../assets/slimecoin.png')}
+          />
+        </Text>
       </View>
-      <View style={styles.buttonView}>
+      <View style={globalStyles.buttonView}>
         <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
         <Slider
           style={styles.slider}
