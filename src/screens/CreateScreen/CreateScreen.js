@@ -91,6 +91,7 @@ export default function CreateScreen(props) {
         .doc(newGameID)
         .set({
           players: [user.id],
+          playersLeft: [false, false, false],
           matchState: MatchState.LOBBY,
           pyramidGrid: startingPyramidGrid(Values.PYRAMID_GRID_BASE_SIZE),
           startingPlayer: starter,

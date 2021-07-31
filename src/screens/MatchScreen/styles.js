@@ -1,7 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
-  container: {
+  matchContainer: {
     marginHorizontal: 10,
     marginVertical: 5,
   },

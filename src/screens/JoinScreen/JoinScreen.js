@@ -77,7 +77,7 @@ export default function JoinScreen(props) {
               );
             }
           } else {
-            console.log('Failed to join game ' + joinGameID + 'for ' + user.id);
+            alert('Failed to join game ' + joinGameID);
           }
         })
         .catch(error => {
@@ -100,7 +100,7 @@ export default function JoinScreen(props) {
         underlineColorAndroid="green"
         autoCorrect={false}
         marginBottom={10}
-        onChangeText={text => setJoinGameID(text)}
+        onChangeText={text => setJoinGameID(text.toUpperCase())}
         placeholder={'Game Room ID'}
         value={joinGameID}
         styles={styles.inputText}

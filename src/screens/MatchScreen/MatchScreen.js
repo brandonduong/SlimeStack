@@ -25,6 +25,7 @@ export default function MatchScreen(props) {
 
   const [round, setRound] = useState(1);
   const [players, setPlayers] = useState([]);
+  const [playersLeft, setPlayersLeft] = useState([false, false, false]);
   const [playerHand, setPlayerHand] = useState([]);
   const [playerHandSizes, setPlayerHandSizes] = useState([12, 12, 12]);
   const [selectedSlime, setSelectedSlime] = useState(null);
@@ -47,6 +48,7 @@ export default function MatchScreen(props) {
       .then(doc => {
         const data = doc.data();
         setPlayers(data.players);
+        setPlayersLeft(data.playersLeft);
         setUserIndex(data.players.indexOf(user.id));
         setPyramidGrid(data.pyramidGrid);
         setCurrentPlayerTurn(data.startingPlayer);
@@ -61,7 +63,7 @@ export default function MatchScreen(props) {
         const data = doc.data();
 
         // Stop listening if player has left
-        if (!data.players.includes(user.id)) {
+        if (data.playersLeft[userIndex]) {
           console.log('Player stopped listening ');
           kill();
         } else if (gameEnded === MatchState.STARTED) {
@@ -73,10 +75,12 @@ export default function MatchScreen(props) {
 
           // Reset turn timer for every new turn
           setTurnTimeLeft(Values.TURN_TIMER);
+
           setCurrentPlayerTurn(data.currentPlayerTurn);
           setRound(data.roundNum);
           setGameEnded(data.matchState);
           setPlayersCanMove(data.playersCanMove);
+          setPlayersLeft(data.playersLeft);
 
           // Find index of the player before current player
           let lastPlayerIndex = data.players.indexOf(user.id - 1);
@@ -344,13 +348,15 @@ export default function MatchScreen(props) {
   }
 
   async function leaveMatch() {
-    setPlayers(players.splice(userIndex, 1));
-    matchesRef.doc(gameID).update({players: players});
+    const newPlayersLeft = playersLeft;
+    newPlayersLeft[userIndex] = true;
+    setPlayersLeft(newPlayersLeft);
+    matchesRef.doc(gameID).update({playersLeft: newPlayersLeft});
     navigation.navigate(Screens.HOME);
   }
 
   return (
-    <View style={globalStyles.container}>
+    <View style={styles.matchContainer}>
       <View style={styles.matchInfoHeader}>
         <View style={styles.rounds}>
           <Text style={styles.roundCounter}>Round: {round}</Text>

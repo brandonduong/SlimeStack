@@ -87,12 +87,7 @@ export default function HomeScreen(props) {
           }
         />
         <PrimaryButton text={'How To Play'} />
-        <BackButton
-          onPress={() => {
-            logout();
-          }}
-          margin={Dimensions.get('screen').width / 15}
-        />
+        <PrimaryButton text={'Logout'} onPress={() => logout()} />
       </View>
 
       {/*
