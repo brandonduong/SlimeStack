@@ -8,14 +8,17 @@ import Values from '../../constants/Values';
 import {BackButton, LoadingPage} from '../../components/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {firebase} from '../../firebase/config';
+import Alert from 'react-native/Libraries/Alert/Alert';
 
 export default function JoinScreen(props) {
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [joinGameID, setJoinGameID] = useState('');
+
   const matchesRef = firebase.firestore().collection('match');
   const navigation = props.navigation;
   const user = props.user;
+  const slimeCoins = props.route.params.slimeCoins;
 
   useEffect(() => {
     console.log('Create screen');
@@ -32,14 +35,42 @@ export default function JoinScreen(props) {
           console.log(doc.data());
           if (doc.exists) {
             const data = doc.data();
-            if (data.players.length < 3 && !data.players.includes(user.id)) {
-              matchesRef
-                .doc(joinGameID)
-                .update({players: [...data.players, user.id]});
-              console.log('Join game ' + joinGameID + 'for ' + user.id);
-              setDisableButton(true);
-              setIsLoading(true);
-              navigation.navigate(Screens.LOBBY, {gameID: joinGameID});
+
+            // Deals with joining a lobby that has higer buyin fee
+            if (slimeCoins < data.buyinFee) {
+              Alert.alert(
+                'Not enough SlimeCoins!',
+                'You do not have enough SlimeCoins to join this lobby with buy-in fee of ' +
+                  data.buyinFee,
+                [{text: 'OK'}],
+                {cancelable: false},
+              );
+            } else if (
+              data.players.length < 3 &&
+              !data.players.includes(user.id)
+            ) {
+              Alert.alert(
+                'About to Join Game!',
+                `This lobby has buy-in fee of ${data.buyinFee}. Are you sure you want to join?`,
+                [
+                  {
+                    text: 'Join',
+                    onPress: () => {
+                      matchesRef
+                        .doc(joinGameID)
+                        .update({players: [...data.players, user.id]});
+                      console.log('Join game ' + joinGameID + 'for ' + user.id);
+                      setDisableButton(true);
+                      setIsLoading(true);
+                      navigation.navigate(Screens.LOBBY, {gameID: joinGameID});
+                    },
+                  },
+                  {
+                    text: 'Cancel',
+                  },
+                ],
+                {cancelable: false},
+              );
             } else {
               console.log(
                 'Failed to join game ' + joinGameID + 'for ' + user.id,
@@ -59,36 +90,34 @@ export default function JoinScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
-          <View style={styles.mainView}>
-            <Text style={styles.title}>Join Game</Text>
-            <TextInput
-              placeholderTextColor="green"
-              underlineColorAndroid="green"
-              autoCorrect={false}
-              marginBottom={10}
-              onChangeText={text => setJoinGameID(text)}
-              placeholder={'Game Room ID'}
-              value={joinGameID}
-              styles={styles.inputText}
-            />
-            <PrimaryButton
-              text={'Join'}
-              onPress={() => joinGame()}
-              disabled={disableButton}
-            />
-          </View>
-          <View style={styles.backButtonView}>
-            <BackButton
-              onPress={() => {
-                navigation.navigate(Screens.HOME);
-              }}
-              margin={Dimensions.get('screen').width / 15}
-            />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+      <Text style={styles.title}>Join Game</Text>
+      <View style={styles.header}>
+        <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
+        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+      </View>
+      <TextInput
+        placeholderTextColor="green"
+        underlineColorAndroid="green"
+        autoCorrect={false}
+        marginBottom={10}
+        onChangeText={text => setJoinGameID(text)}
+        placeholder={'Game Room ID'}
+        value={joinGameID}
+        styles={styles.inputText}
+      />
+      <PrimaryButton
+        text={'Join'}
+        onPress={() => joinGame()}
+        disabled={disableButton}
+      />
+      <View style={styles.buttonView}>
+        <BackButton
+          onPress={() => {
+            navigation.navigate(Screens.HOME);
+          }}
+          margin={Dimensions.get('screen').width / 15}
+        />
+      </View>
     </View>
   );
 }

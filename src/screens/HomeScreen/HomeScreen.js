@@ -82,7 +82,9 @@ export default function HomeScreen(props) {
         />
         <PrimaryButton
           text={'Join Game'}
-          onPress={() => navigation.navigate(Screens.JOIN)}
+          onPress={() =>
+            navigation.navigate(Screens.JOIN, {slimeCoins: slimeCoins})
+          }
         />
         <PrimaryButton text={'How To Play'} />
         <BackButton

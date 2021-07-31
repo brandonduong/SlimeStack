@@ -95,6 +95,7 @@ export default function App() {
                 {...props}
                 user={user}
                 navigation={props.navigation}
+                route={props.route}
               />
             )}
           </Stack.Screen>

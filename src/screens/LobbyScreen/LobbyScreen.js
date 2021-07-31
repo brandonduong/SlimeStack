@@ -19,10 +19,18 @@ export default function LobbyScreen(props) {
   const gameID = props.route.params.gameID;
   const [players, setPlayers] = useState([]);
   const [playerNames, setPlayerNames] = useState([]);
+  const [buyinFee, setBuyinFee] = useState(0);
   // const [playerNames, setPlayerNames] = useState([]);
 
   useEffect(() => {
-    console.log('Lobby screen fo r: ' + gameID);
+    console.log('Lobby screen for: ' + gameID);
+    matchesRef
+      .doc(gameID)
+      .get()
+      .then(doc => {
+        setBuyinFee(doc.data().buyinFee);
+      });
+
     const kill = matchesRef.doc(gameID).onSnapshot(
       doc => {
         const data = doc.data();
@@ -163,26 +171,25 @@ export default function LobbyScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <View style={styles.mainView}>
-        <Text style={styles.title}>Lobby</Text>
-        <Text style={styles.subTitle}>Join Code:</Text>
-        <Text style={styles.joinCode}>{gameID}</Text>
-        {/*
-        <View style={styles.playerView}>
-          {players.map((player, id) => (
-            <Text style={styles.playerID} key={'player-' + id}>
-              Player {id + 1}: {player}
-            </Text>
-          ))}
-        </View>
-        */}
-        <View style={styles.playerView}>
-          {playerNames.map((player, id) => (
-            <Text style={styles.playerID} key={'player-' + id}>
-              Player {id + 1}: {player}
-            </Text>
-          ))}
-        </View>
+      <Text style={styles.title}>Lobby</Text>
+      <Text style={styles.subTitle}>Join Code:</Text>
+      <Text style={styles.joinCode}>{gameID}</Text>
+      <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
+      {/*
+      <View style={styles.playerView}>
+        {players.map((player, id) => (
+          <Text style={styles.playerID} key={'player-' + id}>
+            Player {id + 1}: {player}
+          </Text>
+        ))}
+      </View>
+      */}
+      <View style={styles.playerView}>
+        {playerNames.map((player, id) => (
+          <Text style={styles.playerID} key={'player-' + id}>
+            Player {id + 1}: {player}
+          </Text>
+        ))}
       </View>
       <View style={styles.buttonView}>
         {players[0] === user.id ? (

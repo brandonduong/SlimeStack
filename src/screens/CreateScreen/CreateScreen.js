@@ -10,10 +10,13 @@ import {BackButton, LoadingPage} from '../../components/index';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {firebase} from '../../firebase/config';
 import Slimes from '../../constants/Slimes';
+import Slider from '@react-native-community/slider';
 
 export default function CreateScreen(props) {
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [buyinFee, setBuyinFee] = useState(0);
+
   const matchesRef = firebase.firestore().collection('match');
   const navigation = props.navigation;
   const user = props.user;
@@ -94,6 +97,7 @@ export default function CreateScreen(props) {
           currentPlayerTurn: starter,
           playersCanMove: [true, true, true],
           roundNum: 1,
+          buyinFee: buyinFee,
         })
         .then(() => {
           console.log('New game ' + newGameID + 'for ' + user.id);
@@ -109,26 +113,33 @@ export default function CreateScreen(props) {
 
   return (
     <View style={globalStyles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Text style={styles.title}>Create Game</Text>
-        <View style={styles.header}>
-          <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
-          <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
-        </View>
-        <View style={styles.buttonView}>
-          <PrimaryButton
-            text={'Start'}
-            onPress={() => createGame()}
-            disabled={disableButton}
-          />
-          <BackButton
-            onPress={() => {
-              navigation.navigate(Screens.HOME);
-            }}
-            margin={Dimensions.get('screen').width / 15}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+      <Text style={styles.title}>Create Game</Text>
+      <View style={styles.header}>
+        <Text style={styles.feedbackText}>Welcome, {user.fullName}. </Text>
+        <Text style={styles.feedbackText}>SlimeCoins: {slimeCoins}!</Text>
+      </View>
+      <View style={styles.buttonView}>
+        <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={0}
+          maximumValue={slimeCoins}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+          onValueChange={val => setBuyinFee(Math.round(val))}
+        />
+        <PrimaryButton
+          text={'Start'}
+          onPress={() => createGame()}
+          disabled={disableButton}
+        />
+        <BackButton
+          onPress={() => {
+            navigation.navigate(Screens.HOME);
+          }}
+          margin={Dimensions.get('screen').width / 15}
+        />
+      </View>
     </View>
   );
 }

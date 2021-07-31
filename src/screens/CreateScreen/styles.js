@@ -7,6 +7,10 @@ export default StyleSheet.create({
     marginBottom: 3,
     marginTop: 50,
   },
+  optionTag: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+  },
   buttonView: {
     flex: 2,
     display: 'flex',
@@ -50,5 +54,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: Dimensions.get('screen').height / 40,
+  },
+  slider: {
+    width: Dimensions.get('screen').width / 2,
+    height: Dimensions.get('screen').height / 40,
   },
 });

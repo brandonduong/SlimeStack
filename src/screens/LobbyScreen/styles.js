@@ -18,7 +18,10 @@ export default StyleSheet.create({
   title: {
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
-    marginBottom: 10,
+  },
+  optionTag: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
   },
   subTitle: {
     fontSize: Dimensions.get('screen').height / 30,

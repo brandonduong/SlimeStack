@@ -40,7 +40,7 @@ export default StyleSheet.create({
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
     marginBottom: 3,
-    marginTop: 50
+    marginTop: 50,
   },
   instructionsTag: {
     marginTop: 15,

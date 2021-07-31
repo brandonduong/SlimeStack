@@ -10,12 +10,13 @@ export default StyleSheet.create({
   title: {
     fontSize: Dimensions.get('screen').height / 20,
     fontFamily: 'poppins-semibold',
-    marginBottom: 10,
+    marginBottom: 3,
+    marginTop: 50,
   },
-  backButtonView: {
+  buttonView: {
+    flex: 2,
+    minWidth: '85%',
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   errorBox: {
@@ -66,5 +67,12 @@ export default StyleSheet.create({
     fontSize: Dimensions.get('screen').height / 15,
     textAlign: 'center',
     overflow: 'hidden',
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: Dimensions.get('screen').height / 40,
   },
 });
