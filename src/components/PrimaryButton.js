@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
+﻿import React, {Component} from 'react';
 import {StyleSheet, TouchableOpacity, Text, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
+import globalStyles from '../styles';
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 PrimaryButton.propTypes = {
   text: PropTypes.string.isRequired,
@@ -42,30 +44,11 @@ export default function PrimaryButton(props) {
 
   return (
     <TouchableOpacity
-      style={[styles.button, viewStyling, props.buttonStyle]}
+      style={[globalStyles.button, viewStyling, props.buttonStyle]}
       onPress={isDisabled ? () => {} : () => props.onPress()}>
-      <Text style={[styles.text, textStyling, props.textStyle]}>
+      <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
         {props.text}
       </Text>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    minWidth: '45%',
-    maxWidth: '45%',
-    backgroundColor: '#ffffff',
-    borderRadius: Dimensions.get('screen').height,
-    margin: 10,
-    height: Dimensions.get('screen').height / 15,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#4b42f5',
-    fontFamily: 'poppins-semibold',
-    fontSize: Dimensions.get('screen').height / 35,
-  },
-});

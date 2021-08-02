@@ -85,7 +85,10 @@ export default function HomeScreen(props) {
             navigation.navigate(Screens.JOIN, {slimeCoins: slimeCoins})
           }
         />
-        <PrimaryButton text={'How To Play'} />
+        <PrimaryButton
+          text={'How To Play'}
+          onPress={() => console.log('In progress')}
+        />
         <PrimaryButton text={'Logout'} onPress={() => logout()} />
       </View>
 

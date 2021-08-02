@@ -389,9 +389,9 @@ export default function MatchScreen(props) {
         </View>
         <View styles={styles.remainingSlimes}>
           {playerNames.map((playerName, id) => (
-            <View style={styles.remainingSlime}>
+            <View style={styles.remainingSlime} key={'remaining-slimes' + id}>
               {currentPlayerTurn === id ? (
-                <View style={styles.turnIndicator} />
+                <View style={styles.turnIndicator} key={'turn' + id} />
               ) : (
                 <></>
               )}

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
+import globalStyles from '../../styles';
 import {firebase} from '../../firebase/config';
 import Screens from '../../constants/Screens';
 
@@ -54,13 +55,13 @@ export default function LoginScreen(props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <KeyboardAwareScrollView
         style={{flex: 1, width: '100%'}}
         keyboardShouldPersistTaps="always">
         <Image
           style={styles.logo}
-          source={require('../../../assets/icon.png')}
+          source={require('../../assets/slimecoin.png')}
         />
         <TextInput
           style={styles.input}

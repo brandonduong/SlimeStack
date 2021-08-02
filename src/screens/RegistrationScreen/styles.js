@@ -8,10 +8,10 @@ export default StyleSheet.create({
   title: {},
   logo: {
     flex: 1,
-    height: 120,
-    width: 90,
+    height: 80,
+    width: 80,
     alignSelf: 'center',
-    margin: 30,
+    margin: 60,
   },
   input: {
     height: 48,
