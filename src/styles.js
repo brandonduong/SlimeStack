@@ -1,13 +1,13 @@
-import { Dimensions, StyleSheet } from "react-native";
+﻿import {Dimensions, StyleSheet} from 'react-native';
 
 const appBackgroundColor = 'rgb(233,210,238)';
-const textColor = 'rgb(102,62,107)'
+const textColor = 'rgb(102,62,107)';
+const titleColor = 'rgb(78,5,90)';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: appBackgroundColor,
   },
   buttonView: {
@@ -15,11 +15,13 @@ export default StyleSheet.create({
     minWidth: '85%',
     display: 'flex',
     alignItems: 'center',
+    marginTop: 50,
   },
   feedbackText: {
     fontSize: Dimensions.get('screen').height / 30,
     textAlign: 'left',
     color: textColor,
+    fontWeight: 'bold',
   },
   slimeCoins: {
     height: Dimensions.get('screen').height / 30,
@@ -35,25 +37,41 @@ export default StyleSheet.create({
     marginBottom: 3,
   },
   title: {
-    fontSize: Dimensions.get('screen').height / 20,
+    fontSize: Dimensions.get('screen').height / 15,
     fontFamily: 'poppins-semibold',
     marginTop: 50,
-    color: textColor,
+    color: titleColor,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+    marginTop: 50,
+    color: titleColor,
+    fontWeight: 'bold',
   },
   buttonText: {
     color: textColor,
     fontFamily: 'poppins-semibold',
-    fontSize: Dimensions.get('screen').height / 35,
+    fontSize: Dimensions.get('screen').height / 37,
+    fontWeight: 'bold'
   },
   button: {
     minWidth: '45%',
     maxWidth: '45%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#eee7f1',
     borderRadius: Dimensions.get('screen').height,
     margin: 10,
     height: Dimensions.get('screen').height / 15,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: titleColor,
+  },
+  separator: {
+    marginVertical: 8,
+    backgroundColor: 'rgb(186,136,191)',
+    height: 2,
   },
 });

@@ -72,5 +72,6 @@ const styles = StyleSheet.create({
     fontSize: Dimensions.get('screen').height / 60,
     fontFamily: 'poppins-semibold',
     marginLeft: 0.5,
+    color: 'rgb(78,5,90)',
   },
 });

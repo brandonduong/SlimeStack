@@ -6,8 +6,7 @@ import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import MatchState from '../../constants/MatchState';
-import {BackButton, LoadingPage} from '../../components/index';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {BackButton} from '../../components/index';
 import {firebase} from '../../firebase/config';
 import Slimes from '../../constants/Slimes';
 import Slider from '@react-native-community/slider';
@@ -128,7 +127,7 @@ export default function CreateScreen(props) {
         </Text>
       </View>
       <View style={globalStyles.buttonView}>
-        <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
+        <Text style={globalStyles.feedbackText}>Buy-in Fee: {buyinFee}</Text>
         <Slider
           style={styles.slider}
           minimumValue={0}
@@ -136,6 +135,7 @@ export default function CreateScreen(props) {
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
           onValueChange={val => setBuyinFee(Math.round(val))}
+          thumbTintColor={'rgb(102,62,107)'}
         />
         <PrimaryButton
           text={'Start'}

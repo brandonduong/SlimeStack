@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Dimensions} from 'react-native';
+import {Text, View, Dimensions, Image} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -174,9 +174,18 @@ export default function LobbyScreen(props) {
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Lobby</Text>
-      <Text style={styles.subTitle}>Join Code:</Text>
-      <Text style={styles.joinCode}>{gameID}</Text>
-      <Text style={styles.optionTag}>Buy-in Fee: {buyinFee}</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.feedbackText}>
+          Join Code: {gameID}
+        </Text>
+        <Text style={globalStyles.feedbackText}>
+            Buy-in Fee: {buyinFee}{' '}
+            <Image
+              style={globalStyles.slimeCoins}
+              source={require('../../assets/slimecoin.png')}
+            />
+        </Text>
+      </View>
       {/*
       <View style={styles.playerView}>
         {players.map((player, id) => (
@@ -187,8 +196,10 @@ export default function LobbyScreen(props) {
       </View>
       */}
       <View style={styles.playerView}>
+        <Text style={globalStyles.subtitle}>Players Waiting in Lobby</Text>
+        <View style={globalStyles.separator} />
         {playerNames.map((player, id) => (
-          <Text style={styles.playerID} key={'player-' + id}>
+          <Text style={globalStyles.buttonText} key={'player-' + id}>
             Player {id + 1}: {player}
           </Text>
         ))}
@@ -201,7 +212,7 @@ export default function LobbyScreen(props) {
             disabled={disableButton}
           />
         ) : (
-          <Text style={styles.waitText}>Waiting for player 1 to start.</Text>
+          <Text style={globalStyles.buttonText}>Waiting for player 1 to start.</Text>
         )}
         <BackButton
           onPress={() => {

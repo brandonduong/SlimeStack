@@ -111,21 +111,24 @@ export default function JoinScreen(props) {
         </Text>
       </View>
       <TextInput
-        placeholderTextColor="green"
-        underlineColorAndroid="green"
+        placeholderTextColor={'rgb(102,62,107)'}
+        underlineColorAndroid={'rgb(78,5,90)'}
         autoCorrect={false}
-        marginBottom={10}
         onChangeText={text => setJoinGameID(text.toUpperCase())}
         placeholder={'Game Room ID'}
         value={joinGameID}
-        styles={styles.inputText}
-      />
-      <PrimaryButton
-        text={'Join'}
-        onPress={() => joinGame()}
-        disabled={disableButton}
+        color={'rgb(78,5,90)'}
+        maxLength={8}
+        textAlign={'center'}
+        fontSize={Dimensions.get('screen').width / 20}
+        autoCapitalize={'characters'}
       />
       <View style={globalStyles.buttonView}>
+        <PrimaryButton
+          text={'Join'}
+          onPress={() => joinGame()}
+          disabled={disableButton}
+        />
         <BackButton
           onPress={() => {
             navigation.navigate(Screens.HOME);

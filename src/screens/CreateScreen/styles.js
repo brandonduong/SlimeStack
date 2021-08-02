@@ -12,7 +12,7 @@ export default StyleSheet.create({
     fontFamily: 'poppins-semibold',
   },
   buttonView: {
-    flex: 2,
+    flex: 1,
     display: 'flex',
     alignItems: 'center',
   },

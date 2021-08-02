@@ -45,7 +45,7 @@ export default function HomeScreen(props) {
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Slime Stack</Text>
       <View style={globalStyles.header}>
-        <Text style={globalStyles.feedbackText}>Welcome, {username}. </Text>
+        <Text style={globalStyles.feedbackText}>Welcome, {username}!</Text>
         <Text style={globalStyles.feedbackText}>
           SlimeCoins: {slimeCoins}{' '}
           <Image

@@ -371,99 +371,101 @@ export default function MatchScreen(props) {
   }
 
   return (
-    <View style={styles.matchContainer}>
-      <View style={styles.matchInfoHeader}>
-        <View style={styles.rounds}>
-          <Text style={styles.roundCounter}>Round: {round}</Text>
-          <MatchEventHeader
-            gameEnded={gameEnded}
-            currentPlayerTurn={currentPlayerTurn}
-            userIndex={userIndex}
-            winners={winners}
-          />
-          {turnTimeLeft >= 0 && gameEnded === MatchState.STARTED ? (
-            <Text style={styles.turnTimer}>Time Left: {turnTimeLeft}</Text>
-          ) : (
-            <Text style={styles.turnTimer} />
-          )}
-        </View>
-        <View styles={styles.remainingSlimes}>
-          {playerNames.map((playerName, id) => (
-            <View style={styles.remainingSlime} key={'remaining-slimes' + id}>
-              {currentPlayerTurn === id ? (
-                <View style={styles.turnIndicator} key={'turn' + id} />
-              ) : (
-                <></>
-              )}
-
-              <Text
-                style={styles.remainingSlimeCounter}
-                key={'remaining-slime-counter' + id}>
-                {playersCanMove[id] ? (
-                  <></>
+    <View style={globalStyles.container}>
+      <View style={styles.matchContainer}>
+        <View style={styles.matchInfoHeader}>
+          <View style={styles.rounds}>
+            <Text style={styles.roundCounter}>Round: {round}</Text>
+            {turnTimeLeft >= 0 && gameEnded === MatchState.STARTED ? (
+              <Text style={styles.turnTimer}>Time Left: {turnTimeLeft}</Text>
+            ) : (
+              <></>
+            )}
+            <MatchEventHeader
+              gameEnded={gameEnded}
+              currentPlayerTurn={currentPlayerTurn}
+              userIndex={userIndex}
+              winners={winners}
+            />
+          </View>
+          <View styles={styles.remainingSlimes}>
+            {playerNames.map((playerName, id) => (
+              <View style={styles.remainingSlime} key={'remaining-slimes' + id}>
+                {currentPlayerTurn === id ? (
+                  <View style={styles.turnIndicator} key={'turn' + id} />
                 ) : (
-                  <Text
-                    styles={styles.playerCanMoveIndicator}
-                    key={'can-move-indicator' + id}>
-                    X{' '}
-                  </Text>
+                  <></>
                 )}
-                {playerName}: {playerHandSizes[id]}
-              </Text>
-            </View>
-          ))}
+
+                <Text
+                  style={styles.remainingSlimeCounter}
+                  key={'remaining-slime-counter' + id}>
+                  {playersCanMove[id] ? (
+                    <></>
+                  ) : (
+                    <Text
+                      styles={styles.playerCanMoveIndicator}
+                      key={'can-move-indicator' + id}>
+                      X{' '}
+                    </Text>
+                  )}
+                  {playerName}: {playerHandSizes[id]}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-      <PyramidGrid
-        pyramidGrid={pyramidGrid}
-        selectedSlime={selectedSlime}
-        gameID={gameID}
-        playerHand={playerHand}
-        userIndex={userIndex}
-        setPlayerHand={setPlayerHand}
-        placeOnGrid={
-          gameEnded === MatchState.STARTED ? placeSlime : async () => {}
-        }
-      />
-
-      <View style={styles.separator} />
-
-      <View style={styles.hand}>
-        <HandRow
-          hand={playerHand}
-          rowStart={0}
-          rowEnd={Values.HAND_SIZE / 2}
+        <PyramidGrid
+          pyramidGrid={pyramidGrid}
           selectedSlime={selectedSlime}
-          setSelectedSlime={setSelectedSlime}
+          gameID={gameID}
+          playerHand={playerHand}
+          userIndex={userIndex}
+          setPlayerHand={setPlayerHand}
+          placeOnGrid={
+            gameEnded === MatchState.STARTED ? placeSlime : async () => {}
+          }
         />
 
-        <HandRow
-          hand={playerHand}
-          rowStart={Values.HAND_SIZE / 2}
-          rowEnd={Values.HAND_SIZE}
-          selectedSlime={selectedSlime}
-          setSelectedSlime={setSelectedSlime}
-        />
-      </View>
+        <View style={globalStyles.separator} />
 
-      <View style={styles.buttonView}>
-        <PrimaryButton
-          text={'Skip Turn'}
-          onPress={() => {
-            if (gameEnded === MatchState.STARTED) {
-              skipTurn().then(() =>
-                console.log('Player', userIndex, 'skipped turn'),
-              );
-            }
-          }}
-        />
-        <PrimaryButton
-          text={'Leave'}
-          onPress={() => {
-            leaveMatch().then(() => console.log('Player left game'));
-          }}
-        />
+        <View style={styles.hand}>
+          <HandRow
+            hand={playerHand}
+            rowStart={0}
+            rowEnd={Values.HAND_SIZE / 2}
+            selectedSlime={selectedSlime}
+            setSelectedSlime={setSelectedSlime}
+          />
+
+          <HandRow
+            hand={playerHand}
+            rowStart={Values.HAND_SIZE / 2}
+            rowEnd={Values.HAND_SIZE}
+            selectedSlime={selectedSlime}
+            setSelectedSlime={setSelectedSlime}
+          />
+        </View>
+
+        <View style={styles.buttonView}>
+          <PrimaryButton
+            text={'Skip Turn'}
+            onPress={() => {
+              if (gameEnded === MatchState.STARTED) {
+                skipTurn().then(() =>
+                  console.log('Player', userIndex, 'skipped turn'),
+                );
+              }
+            }}
+          />
+          <PrimaryButton
+            text={'Leave'}
+            onPress={() => {
+              leaveMatch().then(() => console.log('Player left game'));
+            }}
+          />
+        </View>
       </View>
     </View>
   );

@@ -13,11 +13,7 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: 10,
-    marginTop: 10
-  },
-  title: {
-    fontSize: Dimensions.get('screen').height / 20,
-    fontFamily: 'poppins-semibold',
+    marginTop: 10,
   },
   optionTag: {
     fontSize: Dimensions.get('screen').height / 30,
@@ -30,6 +26,7 @@ export default StyleSheet.create({
   joinCode: {
     fontSize: Dimensions.get('screen').height / 30,
     fontFamily: 'poppins-semibold',
+    fontWeight: 'bold',
   },
   playerID: {
     fontSize: Dimensions.get('screen').height / 45,

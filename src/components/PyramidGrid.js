@@ -23,35 +23,38 @@ PyramidGrid.propTypes = {
 
 export default function PyramidGrid(props) {
   function pyramidCellStyle(slime) {
-    let colour = '#FFFFFF';
+    let colour = '#efefef';
+
     switch (slime) {
       case Slimes.YELLOW:
-        colour = 'yellow';
+        colour = 'rgba(222,222,85,1)';
         break;
       case Slimes.RED:
-        colour = 'red';
+        colour = 'rgba(191,86,86,1)';
         break;
       case Slimes.PINK:
-        colour = 'pink';
+        colour = 'rgba(255,192,203,1)';
         break;
       case Slimes.GREEN:
-        colour = 'green';
+        colour = 'rgba(100,193,100,1)';
         break;
       case Slimes.BLUE:
-        colour = 'lightblue';
+        colour = 'rgba(173, 216, 230,1)';
         break;
       case Slimes.POOP:
-        colour = 'brown';
+        colour = 'rgba(214,124,62,1)';
         break;
     }
 
     return {
       margin: 2,
-      width: Dimensions.get('screen').width / 7 - 16,
-      height: Dimensions.get('screen').width / 7 - 16,
+      width: Dimensions.get('screen').width / 7 - 13,
+      height: Dimensions.get('screen').width / 7 - 13,
       justifyContent: 'space-evenly',
       alignItems: 'center',
       backgroundColor: colour,
+      borderWidth: 1,
+      borderColor: 'rgb(78,5,90)',
     };
   }
 

@@ -2,8 +2,8 @@ import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
   matchContainer: {
-    marginHorizontal: 10,
-    marginVertical: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   mainView: {
     display: 'flex',
@@ -22,14 +22,17 @@ export default StyleSheet.create({
   roundCounter: {
     fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
+    color: 'rgb(78,5,90)',
   },
   turnTimer: {
     fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
+    color: 'rgb(78,5,90)',
   },
   remainingSlimeCounter: {
     fontSize: Dimensions.get('screen').height / 50,
     textAlign: 'right',
+    color: 'rgb(78,5,90)',
   },
   playerCanMoveIndicator: {
     color: '#ff0000',
@@ -37,6 +40,7 @@ export default StyleSheet.create({
   matchInfoHeader: {
     flexDirection: 'row',
     display: 'flex',
+    marginBottom: 15,
   },
   rounds: {
     flexDirection: 'column',
@@ -49,18 +53,12 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
   },
   buttonView: {
-    display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'center',
   },
   hand: {
-    backgroundColor: 'rgba(45,45,45,0.2)',
+    backgroundColor: 'rgb(198,165,217)',
   },
   remainingSlime: {flexDirection: 'row', justifyContent: 'flex-end'},
   turnIndicator: {
@@ -75,7 +73,7 @@ export default StyleSheet.create({
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderBottomColor: 'transparent',
-    borderLeftColor: 'black',
+    borderLeftColor: 'rgb(78,5,90)',
     marginTop: Dimensions.get('screen').height / 115,
     marginRight: 7,
   },
