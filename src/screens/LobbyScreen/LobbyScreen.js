@@ -214,11 +214,10 @@ export default function LobbyScreen(props) {
         ) : (
           <Text style={globalStyles.buttonText}>Waiting for player 1 to start.</Text>
         )}
-        <BackButton
-          onPress={() => {
-            leaveRoom();
-          }}
-          margin={Dimensions.get('screen').width / 15}
+        <PrimaryButton
+          text={'Leave'}
+          onPress={() => leaveRoom()}
+          disabled={disableButton}
         />
       </View>
     </View>

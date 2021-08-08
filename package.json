@@ -24,6 +24,7 @@
     "expo-file-system": "^11.0.2",
     "expo-font": "^9.1.0",
     "firebase": "^8.6.8",
+    "firebase-tools": "^9.16.0",
     "fs": "^0.0.1-security",
     "lottie-react-native": "^4.0.2",
     "os": "^0.1.1",
