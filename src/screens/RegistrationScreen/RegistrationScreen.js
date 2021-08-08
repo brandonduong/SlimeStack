@@ -42,7 +42,7 @@ export default function RegistrationScreen({navigation}) {
             .doc(uid)
             .set(data)
             .then(() => {
-              console.log('User registered');
+              console.log(`User ${uid} registered`);
               navigation.navigate(Screens.LOGIN);
             })
             .catch(error => {
@@ -69,10 +69,9 @@ export default function RegistrationScreen({navigation}) {
           placeholder="Full Name"
           placeholderTextColor="#aaaaaa"
           onChangeText={text => {
-            if (fullName.length < 12) {
-              setFullName(text);
-            }
+            setFullName(text);
           }}
+          maxLength={12}
           value={fullName}
           underlineColorAndroid="transparent"
           autoCapitalize="none"

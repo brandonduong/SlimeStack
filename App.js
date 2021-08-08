@@ -76,7 +76,10 @@ export default function App() {
             )}
           </Stack.Screen>
 
-          <Stack.Screen name={Screens.REGISTER} component={RegistrationScreen} />
+          <Stack.Screen
+            name={Screens.REGISTER}
+            component={RegistrationScreen}
+          />
 
           <Stack.Screen options={{headerShown: false}} name={Screens.CREATE}>
             {props => (
