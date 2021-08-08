@@ -37,7 +37,6 @@ export default function RegistrationScreen({navigation}) {
             id: uid,
             email,
             fullName,
-            slimeCoins: Values.NEW_ACCOUNT_SLIME_COINS,
           };
           usersRef
             .doc(uid)
