@@ -73,6 +73,6 @@ export default StyleSheet.create({
     marginTop: 8,
     backgroundColor: 'rgb(186,136,191)',
     height: 2,
-    width: '80%',
+    width: '90%',
   },
 });

@@ -168,6 +168,10 @@ export default function HomeScreen(props) {
       }}>
       <View style={styles.instructionsView}>
         <Text style={globalStyles.subtitle}>Leaderboard</Text>
+        <View style={styles.leaderboardEntries}>
+          <Text style={styles.leaderboardName}>{`Username`}</Text>
+          <Text style={styles.leaderboardSlimeCoin}>{`SlimeCoins`}</Text>
+        </View>
         <View style={globalStyles.separator} />
         <FlatList
           data={leaderboardData}
