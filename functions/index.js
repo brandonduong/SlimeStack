@@ -3,6 +3,7 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 
 const NEW_ACCOUNT_SLIME_COINS = 0;
+const MAX_SLIME_COINS = 9999999;
 
 // exports.makeUppercase = functions.firestore.document("/messages/{documentId}")
 //     .onCreate((snap, context) => {
@@ -20,6 +21,17 @@ exports.initializeNewAccount = functions.firestore.document("users/{documentId}"
       functions.logger.log("Initializing slime coins for", context.params.documentId);
 
       return snap.ref.set({slimeCoins: NEW_ACCOUNT_SLIME_COINS, dailyLogin: false}, {merge: true});
+    });
+
+exports.capSlimeCoins = functions.firestore.document("users/{documentId}")
+    .onUpdate((change, context) => {
+      let newValue = change.after.data().slimeCoins;
+
+      functions.logger.log("Checking slimecoins for", context.params.documentId);
+      if (newValue > MAX_SLIME_COINS) {
+        newValue = MAX_SLIME_COINS;
+      }
+      return change.after.ref.set({slimeCoins: newValue}, {merge: true});
     });
 
 // exports.resetDailyLogin = functions.pubsub.schedule("every 5 minutes")
