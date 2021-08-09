@@ -50,7 +50,14 @@ export default StyleSheet.create({
     fontFamily: 'poppins-semibold',
     fontWeight: 'bold',
     marginTop: 20,
-    color: 'rgb(78,5,90)',
+    color: 'rgb(102,62,107)',
+  },
+  leaderboardText: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+    fontWeight: 'bold',
+    marginTop: 10,
+    color: 'rgb(102,62,107)',
   },
   instructionsView: {
     backgroundColor: appBackgroundColor,

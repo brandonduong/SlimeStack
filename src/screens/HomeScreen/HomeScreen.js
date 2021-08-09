@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Text, View, Modal, FlatList} from 'react-native';
+import {Image, Text, View, Modal, FlatList, Dimensions} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import {firebase} from '../../firebase/config';
@@ -16,6 +16,13 @@ export default function HomeScreen(props) {
 
   const [slimeCoins, setSlimeCoins] = useState(0);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+  useEffect(() => {
+    // Initialize leaderboard screen
+    refreshLeaderboard();
+  }, []);
 
   useEffect(() => {
     const kill = usersRef.doc(userID).onSnapshot(
@@ -34,6 +41,29 @@ export default function HomeScreen(props) {
       },
     );
   }, [userID, usersRef]);
+
+  function refreshLeaderboard() {
+    usersRef
+      .where('slimeCoins', '>', 0)
+      .orderBy('slimeCoins', 'desc')
+      .limit(100)
+      .get()
+      .then(docs => {
+        let leaderboard = [];
+        docs.forEach(doc => {
+          const data = doc.data();
+          leaderboard.push({
+            fullName: data.fullName,
+            slimeCoins: data.slimeCoins,
+            id: data.id,
+          });
+        });
+        setLeaderboardData(leaderboard);
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
 
   function logout() {
     firebase.auth().signOut().then(props.setUser(null));
@@ -96,6 +126,66 @@ export default function HomeScreen(props) {
     </View>
   );
 
+  const renderLeaderboard = ({item}) => (
+    <View style={{width: '100%'}}>
+      <Text
+        style={
+          styles.leaderboardText
+        }>{`\u2022 ${item.fullName}: ${item.slimeCoins}`}</Text>
+    </View>
+  );
+
+  const instructionScreen = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={showInstructions}
+      onRequestClose={() => {
+        setShowInstructions(!showInstructions);
+      }}>
+      <View style={styles.instructionsView}>
+        <Text style={globalStyles.subtitle}>How to Play!</Text>
+        <FlatList
+          data={instructions}
+          renderItem={renderInstruction}
+          keyExtractor={item => item.id}
+        />
+        <PrimaryButton
+          text={'Back'}
+          onPress={() => setShowInstructions(!showInstructions)}
+        />
+      </View>
+    </Modal>
+  );
+
+  const leaderboardScreen = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={showLeaderboard}
+      onRequestClose={() => {
+        setShowLeaderboard(!showLeaderboard);
+      }}>
+      <View style={styles.instructionsView}>
+        <Text style={globalStyles.subtitle}>Leaderboard</Text>
+        <FlatList
+          data={leaderboardData}
+          renderItem={renderLeaderboard}
+          keyExtractor={item => item.id}
+        />
+        <PrimaryButton
+          width={Dimensions.get('screen').height / 15}
+          onPress={() => refreshLeaderboard()}
+          icon={'redo-alt'}
+        />
+        <PrimaryButton
+          text={'Back'}
+          onPress={() => setShowLeaderboard(!showLeaderboard)}
+        />
+      </View>
+    </Modal>
+  );
+
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Slime Stack</Text>
@@ -127,26 +217,10 @@ export default function HomeScreen(props) {
       */}
 
       {/* Instructions */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showInstructions}
-        onRequestClose={() => {
-          setShowInstructions(!showInstructions);
-        }}>
-        <View style={styles.instructionsView}>
-          <Text style={globalStyles.subtitle}>How to Play!</Text>
-          <FlatList
-            data={instructions}
-            renderItem={renderInstruction}
-            keyExtractor={item => item.id}
-          />
-          <PrimaryButton
-            text={'Back'}
-            onPress={() => setShowInstructions(!showInstructions)}
-          />
-        </View>
-      </Modal>
+      {instructionScreen()}
+
+      {/* Leaderboard */}
+      {leaderboardScreen()}
 
       <View style={globalStyles.buttonView}>
         <PrimaryButton
@@ -167,7 +241,7 @@ export default function HomeScreen(props) {
         />
         <PrimaryButton
           text={'Leaderboard'}
-          onPress={() => console.log('In progress')}
+          onPress={() => setShowLeaderboard(true)}
         />
         <PrimaryButton text={'Logout'} onPress={() => logout()} />
       </View>

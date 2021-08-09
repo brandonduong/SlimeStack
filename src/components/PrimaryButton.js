@@ -2,16 +2,19 @@
 import {StyleSheet, TouchableOpacity, Text, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import globalStyles from '../styles';
+import {Icon} from 'react-native-elements';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 PrimaryButton.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
+  icon: PropTypes.string,
   onPress: PropTypes.func.isRequired,
   disabled: PropTypes.bool, // By default it is not disabled
   color: PropTypes.string, // White by default
   hasOutline: PropTypes.bool, // No outline by default
   outlineColor: PropTypes.string, //White by default
   textColor: PropTypes.string, // White by default
-  width: PropTypes.string, //85% by default
+  width: PropTypes.number, //85% by default
   buttonStyle: PropTypes.object,
   textStyle: PropTypes.object,
 };
@@ -45,9 +48,15 @@ export default function PrimaryButton(props) {
     <TouchableOpacity
       style={[globalStyles.button, viewStyling, props.buttonStyle]}
       onPress={isDisabled ? () => {} : () => props.onPress()}>
-      <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
-        {props.text}
-      </Text>
+      {props.text && (
+        <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
+          {props.text}
+        </Text>
+      )}
+
+      {props.icon && (
+        <FontAwesome5 name={props.icon} style={globalStyles.buttonText} />
+      )}
     </TouchableOpacity>
   );
 }
