@@ -66,6 +66,10 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 10,
+  },
+  instructionImage: {
+    width: Dimensions.get('screen').width - 60,
+    alignSelf: 'center',
   },
 });

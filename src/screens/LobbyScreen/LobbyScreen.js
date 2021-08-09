@@ -175,15 +175,13 @@ export default function LobbyScreen(props) {
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Lobby</Text>
       <View style={globalStyles.header}>
+        <Text style={globalStyles.feedbackText}>Join Code: {gameID}</Text>
         <Text style={globalStyles.feedbackText}>
-          Join Code: {gameID}
-        </Text>
-        <Text style={globalStyles.feedbackText}>
-            Buy-in Fee: {buyinFee}{' '}
-            <Image
-              style={globalStyles.slimeCoins}
-              source={require('../../assets/slimecoin.png')}
-            />
+          Buy-in Fee: {buyinFee}{' '}
+          <Image
+            style={globalStyles.slimeCoins}
+            source={require('../../assets/slimecoin.png')}
+          />
         </Text>
       </View>
       {/*

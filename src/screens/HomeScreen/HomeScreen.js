@@ -45,11 +45,13 @@ export default function HomeScreen(props) {
     {
       instruction: `Start each game with ${Values.HAND_SIZE} random slimes in hand.`,
       id: 1,
+      imageSrc: require('../../assets/slimestack1.png'),
     },
     {
       instruction:
         'Take turns stacking slimes in the shape of a pyramid against other players!',
       id: 2,
+      imageSrc: require('../../assets/slimestack2.png'),
     },
     {
       instruction:
@@ -64,15 +66,34 @@ export default function HomeScreen(props) {
     {
       instruction: 'No slime can be placed on top of a golden slime.',
       id: 5,
+      imageSrc: require('../../assets/slimestack3.png'),
     },
     {
       instruction: 'The player with the smallest hand at the end wins!',
       id: 6,
+      imageSrc: require('../../assets/slimestack4.png'),
+    },
+    {
+      instruction:
+        'Above, the player Tupy has only 5 slimes left in their hand, therefore Tupy wins!',
+      id: 7,
     },
   ];
 
   const renderInstruction = ({item}) => (
-    <Text style={styles.instructionsText}>{`\u2022 ${item.instruction}`}</Text>
+    <View style={{width: '100%'}}>
+      <Text
+        style={styles.instructionsText}>{`\u2022 ${item.instruction}`}</Text>
+      {item.imageSrc ? (
+        <Image
+          style={styles.instructionImage}
+          source={item.imageSrc}
+          resizeMode={'contain'}
+        />
+      ) : (
+        <></>
+      )}
+    </View>
   );
 
   return (
