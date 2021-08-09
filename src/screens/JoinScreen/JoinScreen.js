@@ -129,11 +129,10 @@ export default function JoinScreen(props) {
           onPress={() => joinGame()}
           disabled={disableButton}
         />
-        <BackButton
-          onPress={() => {
-            navigation.navigate(Screens.HOME);
-          }}
-          margin={Dimensions.get('screen').width / 15}
+        <PrimaryButton
+          text={'Back'}
+          onPress={() => navigation.navigate(Screens.HOME)}
+          disabled={disableButton}
         />
       </View>
     </View>

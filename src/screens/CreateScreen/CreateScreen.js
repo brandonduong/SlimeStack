@@ -6,7 +6,6 @@ import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
 import MatchState from '../../constants/MatchState';
-import {BackButton} from '../../components/index';
 import {firebase} from '../../firebase/config';
 import Slimes from '../../constants/Slimes';
 import Slider from '@react-native-community/slider';
@@ -142,11 +141,10 @@ export default function CreateScreen(props) {
           onPress={() => createGame()}
           disabled={disableButton}
         />
-        <BackButton
-          onPress={() => {
-            navigation.navigate(Screens.HOME);
-          }}
-          margin={Dimensions.get('screen').width / 15}
+        <PrimaryButton
+          text={'Back'}
+          onPress={() => navigation.navigate(Screens.HOME)}
+          disabled={disableButton}
         />
       </View>
     </View>

@@ -1,5 +1,7 @@
 import {StyleSheet, Dimensions} from 'react-native';
 
+const appBackgroundColor = 'rgb(233,210,238)';
+
 export default StyleSheet.create({
   input: {
     height: 48,
@@ -46,6 +48,24 @@ export default StyleSheet.create({
   instructionsText: {
     fontSize: Dimensions.get('screen').height / 40,
     fontFamily: 'poppins-semibold',
-    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 20,
+    color: 'rgb(78,5,90)',
+  },
+  instructionsView: {
+    backgroundColor: appBackgroundColor,
+    borderRadius: 20,
+    padding: 10,
+    margin: 20,
+    height: Dimensions.get('screen').height / 1.2,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

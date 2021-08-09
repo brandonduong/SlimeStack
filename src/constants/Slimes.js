@@ -1,10 +1,10 @@
 const Slimes = {
   BLUE: 'Blue',
   RED: 'Red',
-  YELLOW: 'Yellow',
+  ORANGE: 'Orange',
   PINK: 'Pink',
   GREEN: 'Green',
-  POOP: 'Poop',
+  GOLD: 'Gold',
   WILD: 'Wild',
   EMPTY: 'Empty',
 };

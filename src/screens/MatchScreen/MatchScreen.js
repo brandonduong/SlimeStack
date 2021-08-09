@@ -339,8 +339,8 @@ export default function MatchScreen(props) {
             // Can't put anything on poop
 
             if (
-              pyramidGrid[cell - i] === Slimes.POOP ||
-              pyramidGrid[cell - i - 1] === Slimes.POOP
+              pyramidGrid[cell - i] === Slimes.GOLD ||
+              pyramidGrid[cell - i - 1] === Slimes.GOLD
             ) {
               return false;
             }
@@ -350,7 +350,7 @@ export default function MatchScreen(props) {
                 pyramidGrid[cell - i - 1] !== Slimes.EMPTY) ||
               (pyramidGrid[cell - i - 1] === slime &&
                 pyramidGrid[cell - i] !== Slimes.EMPTY) ||
-              (slime === Slimes.POOP &&
+              (slime === Slimes.GOLD &&
                 pyramidGrid[cell - i] !== Slimes.EMPTY &&
                 pyramidGrid[cell - i - 1] !== Slimes.EMPTY)
             );

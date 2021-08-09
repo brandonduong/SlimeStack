@@ -44,7 +44,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   subtitle: {
-    fontSize: Dimensions.get('screen').height / 30,
+    fontSize: Dimensions.get('screen').height / 25,
     fontFamily: 'poppins-semibold',
     marginTop: 50,
     color: titleColor,
@@ -54,11 +54,11 @@ export default StyleSheet.create({
     color: textColor,
     fontFamily: 'poppins-semibold',
     fontSize: Dimensions.get('screen').height / 37,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   button: {
-    minWidth: '45%',
-    maxWidth: '45%',
+    minWidth: Dimensions.get('screen').width / 2.2,
+    maxWidth: Dimensions.get('screen').width / 2.2,
     backgroundColor: '#eee7f1',
     borderRadius: Dimensions.get('screen').height,
     margin: 10,

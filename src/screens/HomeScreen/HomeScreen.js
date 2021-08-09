@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, Text, View, Modal, FlatList} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import {firebase} from '../../firebase/config';
-import {BackButton, PrimaryButton} from '../../components/index';
+import {PrimaryButton} from '../../components/index';
 import Screens from '../../constants/Screens';
-import MatchState from '../../constants/MatchState';
 import Values from '../../constants/Values';
 
 export default function HomeScreen(props) {
@@ -16,6 +15,7 @@ export default function HomeScreen(props) {
   const username = props.user.fullName;
 
   const [slimeCoins, setSlimeCoins] = useState(0);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
     const kill = usersRef.doc(userID).onSnapshot(
@@ -41,6 +41,40 @@ export default function HomeScreen(props) {
     console.log('User logged out');
   }
 
+  const instructions = [
+    {
+      instruction: `Start each game with ${Values.HAND_SIZE} random slimes in hand.`,
+      id: 1,
+    },
+    {
+      instruction:
+        'Take turns stacking slimes in the shape of a pyramid against other players!',
+      id: 2,
+    },
+    {
+      instruction:
+        'Normal slimes can be placed on the bottom row, or on top of two other slimes if at least one of them are of the same color.',
+      id: 3,
+    },
+    {
+      instruction:
+        'The rare golden slime can be placed on the bottom row, or on top of two other slimes, regardless of the slimes beneath.',
+      id: 4,
+    },
+    {
+      instruction: 'No slime can be placed on top of a golden slime.',
+      id: 5,
+    },
+    {
+      instruction: 'The player with the smallest hand at the end wins!',
+      id: 6,
+    },
+  ];
+
+  const renderInstruction = ({item}) => (
+    <Text style={styles.instructionsText}>{`\u2022 ${item.instruction}`}</Text>
+  );
+
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Slime Stack</Text>
@@ -53,7 +87,6 @@ export default function HomeScreen(props) {
             source={require('../../assets/slimecoin.png')}
           />
         </Text>
-
       </View>
       {/*
       <View style={styles.formContainer}>
@@ -72,6 +105,28 @@ export default function HomeScreen(props) {
       </View>
       */}
 
+      {/* Instructions */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showInstructions}
+        onRequestClose={() => {
+          setShowInstructions(!showInstructions);
+        }}>
+        <View style={styles.instructionsView}>
+          <Text style={globalStyles.subtitle}>How to Play!</Text>
+          <FlatList
+            data={instructions}
+            renderItem={renderInstruction}
+            keyExtractor={item => item.id}
+          />
+          <PrimaryButton
+            text={'Back'}
+            onPress={() => setShowInstructions(!showInstructions)}
+          />
+        </View>
+      </Modal>
+
       <View style={globalStyles.buttonView}>
         <PrimaryButton
           text={'Create Game'}
@@ -87,6 +142,10 @@ export default function HomeScreen(props) {
         />
         <PrimaryButton
           text={'How To Play'}
+          onPress={() => setShowInstructions(true)}
+        />
+        <PrimaryButton
+          text={'Leaderboard'}
           onPress={() => console.log('In progress')}
         />
         <PrimaryButton text={'Logout'} onPress={() => logout()} />

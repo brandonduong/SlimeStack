@@ -27,11 +27,11 @@ export default function HandRow(props) {
     let opacity = 1;
 
     switch (slime) {
-      case Slimes.YELLOW:
-        colour = addOpacity('rgba(222,222,85)', opacity);
+      case Slimes.ORANGE:
+        colour = addOpacity('rgba(214,124,62)', opacity);
         break;
       case Slimes.RED:
-        colour = addOpacity('rgba(191,86,86)', opacity);
+        colour = addOpacity('rgba(195,78,78)', opacity);
         break;
       case Slimes.PINK:
         colour = addOpacity('rgba(255,192,203)', opacity);
@@ -42,8 +42,8 @@ export default function HandRow(props) {
       case Slimes.BLUE:
         colour = addOpacity('rgba(173, 216, 230)', opacity);
         break;
-      case Slimes.POOP:
-        colour = addOpacity('rgba(214,124,62)', opacity);
+      case Slimes.GOLD:
+        colour = addOpacity('rgba(255,231,0)', opacity);
         break;
     }
 

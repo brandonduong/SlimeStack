@@ -111,7 +111,7 @@ export default function LobbyScreen(props) {
       Slimes.GREEN,
       Slimes.PINK,
       Slimes.RED,
-      Slimes.YELLOW,
+      Slimes.ORANGE,
     ];
     const max = slimes.length;
     let seededRandom = 0;
@@ -126,7 +126,7 @@ export default function LobbyScreen(props) {
     }
     // 75% chance for a Poo to appear
     if (Math.floor(Math.random() * 4) >= 1) {
-      hands[Math.floor(Math.random() * 3)][size - 1] = Slimes.POOP;
+      hands[Math.floor(Math.random() * 3)][size - 1] = Slimes.GOLD;
     }
     return hands;
   }
@@ -212,7 +212,9 @@ export default function LobbyScreen(props) {
             disabled={disableButton}
           />
         ) : (
-          <Text style={globalStyles.buttonText}>Waiting for player 1 to start.</Text>
+          <Text style={globalStyles.buttonText}>
+            Waiting for player 1 to start.
+          </Text>
         )}
         <PrimaryButton
           text={'Leave'}

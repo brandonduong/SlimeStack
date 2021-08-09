@@ -26,11 +26,11 @@ export default function PyramidGrid(props) {
     let colour = '#efefef';
 
     switch (slime) {
-      case Slimes.YELLOW:
-        colour = 'rgba(222,222,85,1)';
+      case Slimes.ORANGE:
+        colour = 'rgb(214,124,62)';
         break;
       case Slimes.RED:
-        colour = 'rgba(191,86,86,1)';
+        colour = 'rgb(195,78,78)';
         break;
       case Slimes.PINK:
         colour = 'rgba(255,192,203,1)';
@@ -41,8 +41,8 @@ export default function PyramidGrid(props) {
       case Slimes.BLUE:
         colour = 'rgba(173, 216, 230,1)';
         break;
-      case Slimes.POOP:
-        colour = 'rgba(214,124,62,1)';
+      case Slimes.GOLD:
+        colour = 'rgb(255,231,0)';
         break;
     }
 

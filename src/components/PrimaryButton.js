@@ -2,7 +2,6 @@
 import {StyleSheet, TouchableOpacity, Text, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import globalStyles from '../styles';
-import { TouchableHighlight } from "react-native-gesture-handler";
 
 PrimaryButton.propTypes = {
   text: PropTypes.string.isRequired,
