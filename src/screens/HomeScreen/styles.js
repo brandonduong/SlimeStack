@@ -9,7 +9,6 @@ export default StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: 'white',
     paddingLeft: 16,
-    flex: 1,
     marginRight: 5,
   },
   button: {
@@ -51,13 +50,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     color: 'rgb(102,62,107)',
-  },
-  leaderboardText: {
-    fontSize: Dimensions.get('screen').height / 30,
-    fontFamily: 'poppins-semibold',
-    fontWeight: 'bold',
-    marginTop: 10,
-    color: 'rgb(102,62,107)',
+    paddingHorizontal: 10,
   },
   instructionsView: {
     backgroundColor: appBackgroundColor,
@@ -76,7 +69,28 @@ export default StyleSheet.create({
     elevation: 10,
   },
   instructionImage: {
-    width: Dimensions.get('screen').width - 60,
+    width: Dimensions.get('screen').width - 70,
     alignSelf: 'center',
+  },
+  leaderboardEntries: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  leaderboardName: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+    fontWeight: 'bold',
+    marginTop: 10,
+    color: 'rgb(102,62,107)',
+    paddingHorizontal: 15,
+  },
+  leaderboardSlimeCoin: {
+    fontSize: Dimensions.get('screen').height / 30,
+    fontFamily: 'poppins-semibold',
+    fontWeight: 'bold',
+    marginTop: 10,
+    color: 'rgb(102,62,107)',
+    paddingHorizontal: 15,
   },
 });

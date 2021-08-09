@@ -127,11 +127,9 @@ export default function HomeScreen(props) {
   );
 
   const renderLeaderboard = ({item}) => (
-    <View style={{width: '100%'}}>
-      <Text
-        style={
-          styles.leaderboardText
-        }>{`\u2022 ${item.fullName}: ${item.slimeCoins}`}</Text>
+    <View style={styles.leaderboardEntries}>
+      <Text style={styles.leaderboardName}>{`${item.fullName}`}</Text>
+      <Text style={styles.leaderboardSlimeCoin}>{`${item.slimeCoins}`}</Text>
     </View>
   );
 
@@ -145,11 +143,13 @@ export default function HomeScreen(props) {
       }}>
       <View style={styles.instructionsView}>
         <Text style={globalStyles.subtitle}>How to Play!</Text>
+        <View style={globalStyles.separator} />
         <FlatList
           data={instructions}
           renderItem={renderInstruction}
           keyExtractor={item => item.id}
         />
+        <View style={globalStyles.separator} />
         <PrimaryButton
           text={'Back'}
           onPress={() => setShowInstructions(!showInstructions)}
@@ -168,11 +168,13 @@ export default function HomeScreen(props) {
       }}>
       <View style={styles.instructionsView}>
         <Text style={globalStyles.subtitle}>Leaderboard</Text>
+        <View style={globalStyles.separator} />
         <FlatList
           data={leaderboardData}
           renderItem={renderLeaderboard}
           keyExtractor={item => item.id}
         />
+        <View style={globalStyles.separator} />
         <PrimaryButton
           width={Dimensions.get('screen').height / 15}
           onPress={() => refreshLeaderboard()}
