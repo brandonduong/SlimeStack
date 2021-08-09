@@ -77,4 +77,11 @@ export default StyleSheet.create({
     marginTop: Dimensions.get('screen').height / 115,
     marginRight: 7,
   },
+  separator: {
+    marginVertical: 8,
+    backgroundColor: 'rgb(186,136,191)',
+    height: 2,
+    width: Dimensions.get('screen').width / 1.11,
+    alignSelf: 'center',
+  },
 });

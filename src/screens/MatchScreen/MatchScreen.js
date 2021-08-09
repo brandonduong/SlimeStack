@@ -428,7 +428,7 @@ export default function MatchScreen(props) {
           }
         />
 
-        <View style={globalStyles.separator} />
+        <View style={styles.separator} />
 
         <View style={styles.hand}>
           <HandRow

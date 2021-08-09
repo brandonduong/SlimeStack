@@ -70,7 +70,7 @@ export default StyleSheet.create({
     borderColor: titleColor,
   },
   separator: {
-    marginVertical: 8,
+    marginTop: 8,
     backgroundColor: 'rgb(186,136,191)',
     height: 2,
     width: '80%',
