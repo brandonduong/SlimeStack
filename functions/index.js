@@ -34,13 +34,13 @@ exports.capSlimeCoins = functions.firestore.document("users/{documentId}")
       return change.after.ref.set({slimeCoins: newValue}, {merge: true});
     });
 
-// exports.resetDailyLogin = functions.pubsub.schedule("every 5 minutes")
-//     .onRun((context) => {
-//       const snapshot = admin.firestore().collection("users").where("dailyLogin", "==", true).get();
-//       snapshot.forEach((doc) => {
-//         admin.firestore().collection("users").doc(doc.id).update({dailyLogin: false}).then((r) => functions.logger.log("Reset daily login reward for", doc.id));
-//       });
-//     });
+exports.resetDailyLogin = functions.pubsub.schedule("every day 00:00")
+    .onRun(async context => {
+      const snapshot = await admin.firestore().collection("users").where("dailyLogin", "==", true).get();
+      await snapshot.forEach((doc) => {
+        admin.firestore().collection("users").doc(doc.id).update({dailyLogin: false}).then((r) => functions.logger.log("Reset daily login reward for", doc.id));
+      });
+    });
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
