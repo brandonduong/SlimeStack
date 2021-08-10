@@ -20,7 +20,7 @@ exports.initializeNewAccount = functions.firestore.document("users/{documentId}"
     .onCreate((snap, context) => {
       functions.logger.log("Initializing slime coins for", context.params.documentId);
 
-      return snap.ref.set({slimeCoins: NEW_ACCOUNT_SLIME_COINS, dailyLogin: false}, {merge: true});
+      return snap.ref.set({slimeCoins: NEW_ACCOUNT_SLIME_COINS, dailyLogin: false, wins: 0, losses: 0}, {merge: true});
     });
 
 exports.capSlimeCoins = functions.firestore.document("users/{documentId}")

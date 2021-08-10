@@ -206,6 +206,17 @@ export default function MatchScreen(props) {
         console.log('Winners:', winningPlayers);
         setWinners(winningPlayers);
 
+        // Add 1 win to user if they are a winner
+        if (winningPlayers.includes(userIndex)) {
+          usersRef
+            .doc(user.id)
+            .update({wins: firebase.firestore.FieldValue.increment(1)});
+        } else {
+          usersRef
+            .doc(user.id)
+            .update({losses: firebase.firestore.FieldValue.increment(1)});
+        }
+
         awardSlimeCoin(winningPlayers);
       });
   }
