@@ -93,4 +93,17 @@ export default StyleSheet.create({
     color: 'rgb(102,62,107)',
     paddingHorizontal: 15,
   },
+  winlossView: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+  },
+  winloss: {
+    fontSize: Dimensions.get('screen').height / 40,
+    fontFamily: 'poppins-semibold',
+    fontWeight: 'bold',
+    color: 'rgb(102,62,107)',
+    paddingHorizontal: 15,
+  },
 });

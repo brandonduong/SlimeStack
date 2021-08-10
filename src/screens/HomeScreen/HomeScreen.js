@@ -19,6 +19,8 @@ export default function HomeScreen(props) {
   const [showInstructions, setShowInstructions] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [wins, setWins] = useState(0);
+  const [losses, setLosses] = useState(0);
 
   useEffect(() => {
     // Initialize leaderboard screen
@@ -42,6 +44,8 @@ export default function HomeScreen(props) {
           kill();
         } else {
           setSlimeCoins(data.slimeCoins);
+          setWins(data.wins);
+          setLosses(data.losses);
         }
       },
       err => {
@@ -212,6 +216,11 @@ export default function HomeScreen(props) {
             source={require('../../assets/slimecoin.png')}
           />
         </Text>
+      </View>
+      <View style={globalStyles.separator}></View>
+      <View style={styles.winlossView}>
+        <Text style={styles.winloss}>{`Wins: ${wins}`}</Text>
+        <Text style={styles.winloss}>{`Losses ${losses}`}</Text>
       </View>
       {/*
       <View style={styles.formContainer}>
