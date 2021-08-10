@@ -13,6 +13,7 @@ export default function HomeScreen(props) {
   const usersRef = firebase.firestore().collection('users');
   const userID = props.user.id;
   const username = props.user.fullName;
+  const dailyBonus = props.route.params.dailyBonus;
 
   const [slimeCoins, setSlimeCoins] = useState(0);
   const [showInstructions, setShowInstructions] = useState(false);
@@ -22,6 +23,13 @@ export default function HomeScreen(props) {
   useEffect(() => {
     // Initialize leaderboard screen
     refreshLeaderboard();
+
+    // Reward daily login bonus
+    if (dailyBonus) {
+      alert(
+        `Thanks for logging in today! Enjoy your daily login bonus of 100 Slime Coins! Don't spend them all in one place!`,
+      );
+    }
   }, []);
 
   useEffect(() => {

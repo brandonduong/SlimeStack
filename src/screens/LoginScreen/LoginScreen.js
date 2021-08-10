@@ -42,8 +42,16 @@ export default function LoginScreen(props) {
             setPassword('');
 
             const user = firestoreDocument.data();
+
+            let dailyBonus = false;
+            if (!user.dailyLogin) {
+              // Track that user has signed in today
+              usersRef.doc(uid).update({dailyLogin: true, slimeCoins: firebase.firestore.FieldValue.increment(100)});
+              dailyBonus = true;
+            }
+
             props.setUser(user);
-            navigation.navigate(Screens.HOME, {user});
+            navigation.navigate(Screens.HOME, {dailyBonus});
           })
           .catch(error => {
             alert(error);

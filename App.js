@@ -62,6 +62,7 @@ export default function App() {
                 user={user}
                 setUser={input => setUser(input)}
                 navigation={props.navigation}
+                route={props.route}
               />
             )}
           </Stack.Screen>
