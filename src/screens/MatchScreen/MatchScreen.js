@@ -222,25 +222,15 @@ export default function MatchScreen(props) {
   }
 
   function awardSlimeCoin(winningPlayers) {
-    usersRef
-      .doc(user.id)
-      .get()
-      .then(doc => {
-        const data = doc.data();
+    let reward = (Values.HAND_SIZE - playerHandSizes[userIndex]) * 10;
+    if (winningPlayers.includes(userIndex)) {
+      // Player is a winner, and shares pot with other winners
+      reward += (buyinFee * 3) / winningPlayers.length;
+    }
 
-        let reward = (Values.HAND_SIZE - playerHandSizes[userIndex]) * 10;
-        if (winningPlayers.includes(userIndex)) {
-          // Player is a winner, and shares pot with other winners
-          reward += (buyinFee * 3) / winningPlayers.length;
-        }
-
-        usersRef.doc(user.id).update({
-          slimeCoins: data.slimeCoins + reward,
-        });
-      })
-      .catch(error => {
-        alert(error);
-      });
+    usersRef.doc(user.id).update({
+      slimeCoins: firebase.firestore.FieldValue.increment(reward),
+    });
   }
 
   async function placeSlime(cell, slime) {

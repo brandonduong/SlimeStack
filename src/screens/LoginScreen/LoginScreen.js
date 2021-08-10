@@ -46,7 +46,10 @@ export default function LoginScreen(props) {
             let dailyBonus = false;
             if (!user.dailyLogin) {
               // Track that user has signed in today
-              usersRef.doc(uid).update({dailyLogin: true, slimeCoins: firebase.firestore.FieldValue.increment(100)});
+              usersRef.doc(uid).update({
+                dailyLogin: true,
+                slimeCoins: firebase.firestore.FieldValue.increment(100),
+              });
               dailyBonus = true;
             }
 
