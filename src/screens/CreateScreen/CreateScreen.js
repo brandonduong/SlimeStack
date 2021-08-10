@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, Text, View, Dimensions, Image} from 'react-native';
+import {Keyboard, Text, View, Dimensions, Image, TextInput} from 'react-native';
 import styles from './styles';
 import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
@@ -126,10 +126,34 @@ export default function CreateScreen(props) {
         </Text>
       </View>
       <View style={globalStyles.buttonView}>
-        <Text style={globalStyles.feedbackText}>Buy-in Fee: {buyinFee}</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={globalStyles.feedbackText}>Buy-in Fee: </Text>
+          <TextInput
+            style={globalStyles.feedbackText}
+            placeholder="0"
+            placeholderTextColor="#aaaaaa"
+            onChangeText={val => {
+              let change = parseInt(
+                val.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, ''),
+              );
+              if (change <= slimeCoins) {
+                setBuyinFee(change);
+              } else if (val.length === 0) {
+                setBuyinFee(0);
+              } else {
+                setBuyinFee(slimeCoins);
+              }
+            }}
+            value={buyinFee.toString()}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+            keyboardType={'number-pad'}
+          />
+        </View>
         <Slider
           style={styles.slider}
           minimumValue={0}
+          value={buyinFee}
           maximumValue={slimeCoins}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
