@@ -14,6 +14,11 @@ import Values from '../../constants/Values';
 import {firebase} from '../../firebase/config';
 import Slimes from '../../constants/Slimes';
 import MatchState from '../../constants/MatchState';
+import {
+  AdEventType,
+  InterstitialAd,
+  TestIds,
+} from '@react-native-firebase/admob';
 
 export default function MatchScreen(props) {
   const navigation = props.navigation;
@@ -37,6 +42,10 @@ export default function MatchScreen(props) {
   const [gameEnded, setGameEnded] = useState(MatchState.STARTED);
   const [playersCanMove, setPlayersCanMove] = useState([true, true, true]);
   const [turnTimeLeft, setTurnTimeLeft] = useState(-1); // First turn should have no timer
+
+  const adUnitId = __DEV__
+    ? TestIds.INTERSTITIAL
+    : 'ca-app-pub-3100447499130313/3835233530';
 
   useEffect(() => {
     console.log('Match screen for: ' + gameID);
@@ -363,7 +372,26 @@ export default function MatchScreen(props) {
     return false;
   }
 
+  function showInterstitialAd() {
+    // Create a new instance
+    const interstitialAd = InterstitialAd.createForAdRequest(adUnitId, {
+      requestNonPersonalizedAdsOnly: true,
+    });
+
+    // Add event handlers
+    interstitialAd.onAdEvent((type, error) => {
+      if (type === AdEventType.LOADED) {
+        interstitialAd.show();
+      }
+    });
+
+    // Load a new advert
+    interstitialAd.load();
+  }
+
   async function leaveMatch() {
+    showInterstitialAd();
+
     const newPlayersLeft = playersLeft;
     newPlayersLeft[userIndex] = true;
     setPlayersLeft(newPlayersLeft);

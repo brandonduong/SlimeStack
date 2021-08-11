@@ -272,7 +272,7 @@ export default function HomeScreen(props) {
             onPress={() => {
               Alert.alert(
                 'Watch an ad?',
-                'Would you like to watch an ad for 300 juicy yummy SlimeCoins?',
+                'Would you like to watch an ad to mine 300 juicy yummy SlimeCoins?',
                 [
                   {text: 'Sure!', onPress: () => showRewardAd()},
                   {
