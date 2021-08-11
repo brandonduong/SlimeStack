@@ -31,7 +31,7 @@ exports.capSlimeCoins = functions.firestore.document("users/{documentId}")
       if (newValue > MAX_SLIME_COINS) {
         newValue = MAX_SLIME_COINS;
       }
-      return change.after.ref.set({slimeCoins: newValue}, {merge: true});
+      return change.after.ref.set({slimeCoins: Math.floor(newValue)}, {merge: true});
     });
 
 exports.resetDailyLogin = functions.pubsub.schedule("every day 00:00")

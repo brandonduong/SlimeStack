@@ -238,7 +238,7 @@ export default function MatchScreen(props) {
     }
 
     usersRef.doc(user.id).update({
-      slimeCoins: firebase.firestore.FieldValue.increment(reward),
+      slimeCoins: firebase.firestore.FieldValue.increment(Math.floor(reward)),
     });
   }
 
