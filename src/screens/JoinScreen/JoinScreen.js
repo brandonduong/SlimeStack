@@ -1,12 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import { Keyboard, Text, View, Dimensions, TextInput, Image } from "react-native";
-import styles from './styles';
+import {Keyboard, Text, View, Dimensions, TextInput, Image} from 'react-native';
 import globalStyles from '../../styles';
 import PrimaryButton from '../../components/PrimaryButton';
 import Screens from '../../constants/Screens';
-import Values from '../../constants/Values';
-import {BackButton, LoadingPage} from '../../components/index';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {firebase} from '../../firebase/config';
 import Alert from 'react-native/Libraries/Alert/Alert';
 

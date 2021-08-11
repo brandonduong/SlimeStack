@@ -4,5 +4,10 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
+  },
+  "react-native": {
+    "admob_android_app_id": "ca-app-pub-3100447499130313~3077713309",
+    "admob_app_id": "ca-app-pub-3100447499130313~3077713309",
+    "admob_delay_app_measurement_init": true
   }
 }

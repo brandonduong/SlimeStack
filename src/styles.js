@@ -24,8 +24,8 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   slimeCoins: {
-    height: Dimensions.get('screen').height / 30,
-    width: Dimensions.get('screen').height / 30,
+    height: Dimensions.get('screen').height / 25,
+    width: Dimensions.get('screen').height / 25,
   },
   header: {
     display: 'flex',
@@ -54,6 +54,12 @@ export default StyleSheet.create({
     color: textColor,
     fontFamily: 'poppins-semibold',
     fontSize: Dimensions.get('screen').height / 37,
+    fontWeight: 'bold',
+  },
+  icon: {
+    color: textColor,
+    fontFamily: 'poppins-semibold',
+    fontSize: Dimensions.get('screen').height / 40,
     fontWeight: 'bold',
   },
   button: {

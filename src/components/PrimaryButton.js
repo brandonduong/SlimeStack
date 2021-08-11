@@ -15,6 +15,7 @@ PrimaryButton.propTypes = {
   outlineColor: PropTypes.string, //White by default
   textColor: PropTypes.string, // White by default
   width: PropTypes.number, //85% by default
+  height: PropTypes.number, //85% by default
   buttonStyle: PropTypes.object,
   textStyle: PropTypes.object,
 };
@@ -39,6 +40,10 @@ export default function PrimaryButton(props) {
     viewStyling.minWidth = props.width;
     viewStyling.maxWidth = props.width;
   }
+  if (props.height) {
+    viewStyling.minHeight = props.height;
+    viewStyling.maxHeight = props.height;
+  }
 
   const isDisabled = !(
     props.disabled === undefined || props.disabled === false
@@ -55,7 +60,7 @@ export default function PrimaryButton(props) {
       )}
 
       {props.icon && (
-        <FontAwesome5 name={props.icon} style={globalStyles.buttonText} />
+        <FontAwesome5 name={props.icon} style={globalStyles.icon} />
       )}
     </TouchableOpacity>
   );

@@ -6,6 +6,13 @@ import {firebase} from '../../firebase/config';
 import {PrimaryButton} from '../../components/index';
 import Screens from '../../constants/Screens';
 import Values from '../../constants/Values';
+import {
+  AdEventType,
+  RewardedAd,
+  RewardedAdEventType,
+  TestIds,
+} from '@react-native-firebase/admob';
+import Alert from 'react-native/Libraries/Alert/Alert';
 
 export default function HomeScreen(props) {
   const navigation = props.navigation;
@@ -22,6 +29,10 @@ export default function HomeScreen(props) {
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
 
+  const adUnitId = __DEV__
+    ? TestIds.REWARDED
+    : 'ca-app-pub-3100447499130313/5020322691';
+
   useEffect(() => {
     // Initialize leaderboard screen
     refreshLeaderboard();
@@ -29,10 +40,49 @@ export default function HomeScreen(props) {
     // Reward daily login bonus
     if (dailyBonus) {
       alert(
-        `Thanks for logging in today! Enjoy your daily login bonus of 100 Slime Coins! Don't spend them all in one place!`,
+        "Thanks for logging in today! Enjoy your daily login bonus of 100 Slime Coins! Don't spend them all in one place!",
       );
     }
   }, []);
+
+  function showRewardAd() {
+    // Create a new instance
+    const rewardAd = RewardedAd.createForAdRequest(adUnitId, {
+      requestNonPersonalizedAdsOnly: true,
+    });
+
+    let adWatched = false;
+
+    // Add event handlers
+    rewardAd.onAdEvent((type, error) => {
+      if (type === RewardedAdEventType.LOADED) {
+        rewardAd.show();
+      }
+
+      if (type === RewardedAdEventType.EARNED_REWARD) {
+        usersRef
+          .doc(userID)
+          .update({slimeCoins: firebase.firestore.FieldValue.increment(300)});
+        adWatched = true;
+      }
+
+      if (type === AdEventType.CLOSED) {
+        if (adWatched) {
+          console.log('User earned reward of 300 SlimeCoins');
+          Alert.alert(
+            'Thanks for watching!',
+            'Here are 300 SlimeCoins as a thanks!',
+            [{text: 'Yum', onPress: () => {}}],
+            {cancelable: true},
+          );
+          adWatched = false;
+        }
+      }
+    });
+
+    // Load a new advert
+    rewardAd.load();
+  }
 
   useEffect(() => {
     const kill = usersRef.doc(userID).onSnapshot(
@@ -181,8 +231,8 @@ export default function HomeScreen(props) {
       <View style={styles.instructionsView}>
         <Text style={globalStyles.subtitle}>Leaderboard</Text>
         <View style={styles.leaderboardEntries}>
-          <Text style={styles.leaderboardName}>{`Username`}</Text>
-          <Text style={styles.leaderboardSlimeCoin}>{`SlimeCoins`}</Text>
+          <Text style={styles.leaderboardName}>{'Username'}</Text>
+          <Text style={styles.leaderboardSlimeCoin}>{'SlimeCoins'}</Text>
         </View>
         <View style={globalStyles.separator} />
         <FlatList
@@ -214,10 +264,28 @@ export default function HomeScreen(props) {
           <Image
             style={globalStyles.slimeCoins}
             source={require('../../assets/slimecoin.png')}
+          />{' '}
+          <PrimaryButton
+            icon={'plus'}
+            width={Dimensions.get('screen').height / 32}
+            height={Dimensions.get('screen').height / 32}
+            onPress={() => {
+              Alert.alert(
+                'Watch an ad?',
+                'Would you like to watch an ad for 300 juicy yummy SlimeCoins?',
+                [
+                  {text: 'Sure!', onPress: () => showRewardAd()},
+                  {
+                    text: 'Not now',
+                  },
+                ],
+                {cancelable: true},
+              );
+            }}
           />
         </Text>
       </View>
-      <View style={globalStyles.separator}></View>
+      <View style={globalStyles.separator} />
       <View style={styles.winlossView}>
         <Text style={styles.winloss}>{`Wins: ${wins}`}</Text>
         <Text style={styles.winloss}>{`Losses ${losses}`}</Text>

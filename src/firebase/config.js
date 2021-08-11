@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import '@firebase/auth';
 import '@firebase/firestore';
+import admob, {MaxAdContentRating} from '@react-native-firebase/admob';
 
 import {
   API_KEY,
@@ -26,5 +27,21 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config);
   firebase.firestore().settings({experimentalForceLongPolling: true});
 }
+
+admob()
+  .setRequestConfiguration({
+    // Update all future requests suitable for parental guidance
+    maxAdContentRating: MaxAdContentRating.PG,
+
+    // Indicates that you want your content treated as child-directed for purposes of COPPA.
+    tagForChildDirectedTreatment: true,
+
+    // Indicates that you want the ad request to be handled in a
+    // manner suitable for users under the age of consent.
+    tagForUnderAgeOfConsent: true,
+  })
+  .then(() => {
+    // Request config successfully set!
+  });
 
 export {firebase};
