@@ -2,8 +2,9 @@
 import {StyleSheet, TouchableOpacity, Text, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import globalStyles from '../styles';
-import {Icon} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Sound from 'react-native-sound';
+import slime from '../assets/slime-noise.mp3';
 
 PrimaryButton.propTypes = {
   text: PropTypes.string,
@@ -21,6 +22,12 @@ PrimaryButton.propTypes = {
 };
 
 export default function PrimaryButton(props) {
+  const slimeSound = new Sound(slime, Sound.MAIN_BUNDLE, error => {
+    if (error) {
+      console.log('Failed to load sound', error);
+      return;
+    }
+  });
   let viewStyling = {};
   let textStyling = {};
   if (props.color) {
@@ -52,23 +59,33 @@ export default function PrimaryButton(props) {
   return (
     <TouchableOpacity
       style={[globalStyles.button, viewStyling, props.buttonStyle]}
-      onPress={isDisabled ? () => {} : () => props.onPress()}>
-      {props.text && props.icon && (
+      onPress={
+        isDisabled
+          ? () => {}
+          : () => {
+              slimeSound.play(success => {
+                if (!success) {
+                  console.log('Sound did not play');
+                } else {
+                  props.onPress();
+                }
+              });
+            }
+      }>
+      {props.text ? (
         <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
-          <FontAwesome5 name={props.icon} style={globalStyles.icon} />{' '}
+          {props.icon && (
+            <FontAwesome5 name={props.icon} style={globalStyles.icon} />
+          )}{' '}
           {props.text}{' '}
+          {props.icon && (
+            <FontAwesome5 name={props.icon} style={globalStyles.icon} />
+          )}
+        </Text>
+      ) : (
+        props.icon && (
           <FontAwesome5 name={props.icon} style={globalStyles.icon} />
-        </Text>
-      )}
-
-      {props.text && !props.icon && (
-        <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
-          {props.text}
-        </Text>
-      )}
-
-      {props.icon && !props.text && (
-        <FontAwesome5 name={props.icon} style={globalStyles.icon} />
+        )
       )}
     </TouchableOpacity>
   );
