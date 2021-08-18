@@ -480,6 +480,7 @@ export default function MatchScreen(props) {
         <View style={styles.buttonView}>
           <PrimaryButton
             text={'Skip Turn'}
+            icon={'forward'}
             onPress={() => {
               if (gameEnded === MatchState.STARTED) {
                 skipTurn().then(() =>
@@ -487,12 +488,15 @@ export default function MatchScreen(props) {
                 );
               }
             }}
+            width={Dimensions.get('screen').width / 2.3}
           />
           <PrimaryButton
             text={'Leave'}
+            icon={'sign-out-alt'}
             onPress={() => {
               leaveMatch().then(() => console.log('Player left game'));
             }}
+            width={Dimensions.get('screen').width / 2.3}
           />
         </View>
       </View>

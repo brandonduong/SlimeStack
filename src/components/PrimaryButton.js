@@ -53,13 +53,21 @@ export default function PrimaryButton(props) {
     <TouchableOpacity
       style={[globalStyles.button, viewStyling, props.buttonStyle]}
       onPress={isDisabled ? () => {} : () => props.onPress()}>
-      {props.text && (
+      {props.text && props.icon && (
+        <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
+          <FontAwesome5 name={props.icon} style={globalStyles.icon} />{' '}
+          {props.text}{' '}
+          <FontAwesome5 name={props.icon} style={globalStyles.icon} />
+        </Text>
+      )}
+
+      {props.text && !props.icon && (
         <Text style={[globalStyles.buttonText, textStyling, props.textStyle]}>
           {props.text}
         </Text>
       )}
 
-      {props.icon && (
+      {props.icon && !props.text && (
         <FontAwesome5 name={props.icon} style={globalStyles.icon} />
       )}
     </TouchableOpacity>

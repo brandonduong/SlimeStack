@@ -13,6 +13,7 @@ import {
   TestIds,
 } from '@react-native-firebase/admob';
 import Alert from 'react-native/Libraries/Alert/Alert';
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 export default function HomeScreen(props) {
   const navigation = props.navigation;
@@ -229,7 +230,10 @@ export default function HomeScreen(props) {
         setShowLeaderboard(!showLeaderboard);
       }}>
       <View style={styles.instructionsView}>
-        <Text style={globalStyles.subtitle}>Leaderboard</Text>
+        <Text style={globalStyles.subtitle}>
+          <FontAwesome5 name={'trophy'} style={globalStyles.icon} /> Leaderboard{' '}
+          <FontAwesome5 name={'trophy'} style={globalStyles.icon} />
+        </Text>
         <View style={styles.leaderboardEntries}>
           <Text style={styles.leaderboardName}>{'Username'}</Text>
           <Text style={styles.leaderboardSlimeCoin}>{'SlimeCoins'}</Text>
@@ -288,7 +292,7 @@ export default function HomeScreen(props) {
       <View style={globalStyles.separator} />
       <View style={styles.winlossView}>
         <Text style={styles.winloss}>{`Wins: ${wins}`}</Text>
-        <Text style={styles.winloss}>{`Losses ${losses}`}</Text>
+        <Text style={styles.winloss}>{`Losses: ${losses}`}</Text>
       </View>
       {/*
       <View style={styles.formContainer}>
@@ -315,26 +319,34 @@ export default function HomeScreen(props) {
 
       <View style={globalStyles.buttonView}>
         <PrimaryButton
+          icon={'sign'}
           text={'Create Game'}
           onPress={() =>
             navigation.navigate(Screens.CREATE, {slimeCoins: slimeCoins})
           }
         />
         <PrimaryButton
+          icon={'sign-in-alt'}
           text={'Join Game'}
           onPress={() =>
             navigation.navigate(Screens.JOIN, {slimeCoins: slimeCoins})
           }
         />
         <PrimaryButton
+          icon={'scroll'}
           text={'How To Play'}
           onPress={() => setShowInstructions(true)}
         />
         <PrimaryButton
+          icon={'trophy'}
           text={'Leaderboard'}
           onPress={() => setShowLeaderboard(true)}
         />
-        <PrimaryButton text={'Logout'} onPress={() => logout()} />
+        <PrimaryButton
+          icon={'sign-out-alt'}
+          text={'Logout'}
+          onPress={() => logout()}
+        />
       </View>
 
       {/*

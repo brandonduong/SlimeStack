@@ -59,12 +59,12 @@ export default StyleSheet.create({
   icon: {
     color: textColor,
     fontFamily: 'poppins-semibold',
-    fontSize: Dimensions.get('screen').height / 40,
+    fontSize: Dimensions.get('screen').height / 50,
     fontWeight: 'bold',
   },
   button: {
-    minWidth: Dimensions.get('screen').width / 2.2,
-    maxWidth: Dimensions.get('screen').width / 2.2,
+    minWidth: Dimensions.get('screen').width / 2.1,
+    maxWidth: Dimensions.get('screen').width / 2.1,
     backgroundColor: '#eee7f1',
     borderRadius: Dimensions.get('screen').height,
     margin: 10,
